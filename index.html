@@ -1,315 +1,356 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Видеозвонок тест CryptoCat</title>
+    <title>Супер-простой видеозвонок</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: #f5f5f5;
+        body { font-family: Arial; margin: 20px; }
+        video { width: 300px; height: 225px; border: 2px solid #333; margin: 10px; }
+        .container { display: flex; flex-wrap: wrap; }
+        button { 
+            padding: 15px; 
+            margin: 10px; 
+            font-size: 18px; 
+            background: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .video-box {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        video {
-            width: 100%;
-            height: 400px;
-            background: black;
-            border-radius: 5px;
-        }
-        .controls {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        .btn {
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-            font-weight: bold;
-        }
-        .btn-primary {
-            background: #007bff;
-            color: white;
-        }
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .code-box {
-            margin-top: 20px;
-            border: 2px dashed #ccc;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            display: none;
-        }
-        textarea {
-            width: 100%;
-            height: 120px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical;
-        }
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            display: none;
-        }
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .hint {
-            color: #666;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .code-controls {
-            margin-top: 10px;
-        }
+        .debug { background: #f0f0f0; padding: 10px; margin-top: 20px; }
+        #qrcode { margin: 20px; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
+    <h1>🔍 Простой видеозвонок</h1>
+    
     <div class="container">
-        <h1>📹 Видеозвонок с другом</h1>
-        
-        <div class="video-grid">
-            <div class="video-box">
-                <h3>👤 Вы</h3>
-                <video id="localVideo" autoplay muted playsinline></video>
-            </div>
-            <div class="video-box">
-                <h3>👥 Друг</h3>
-                <video id="remoteVideo" autoplay playsinline></video>
-            </div>
+        <div>
+            <h3>Ваша камера:</h3>
+            <video id="localVideo" autoplay muted playsinline></video>
+            <div id="localStatus"></div>
         </div>
-        
-        <div class="controls">
-            <h2>🚀 Управление звонком</h2>
-            
-            <div>
-                <button class="btn btn-primary" onclick="startCall()">
-                    📞 Начать звонок
-                </button>
-                <button class="btn btn-success" onclick="answerCall()">
-                    ✅ Принять звонок
-                </button>
-            </div>
-            
-            <div id="offerBox" class="code-box">
-                <h3>1. Отправьте это другу:</h3>
-                <textarea id="offerText" readonly></textarea>
-                <div class="code-controls">
-                    <button class="btn btn-secondary" onclick="copyOffer()">
-                        📋 Скопировать
-                    </button>
-                    <span class="hint">Скопируйте текст выше и отправьте другу любым способом</span>
-                </div>
-            </div>
-            
-            <div id="answerBox" class="code-box">
-                <h3>2. Вставьте ответ от друга:</h3>
-                <textarea id="answerText" placeholder="Вставьте сюда текст, который вам отправил друг..."></textarea>
-                <div class="code-controls">
-                    <button class="btn btn-success" onclick="submitAnswer()">
-                        🚀 Установить соединение
-                    </button>
-                </div>
-            </div>
-            
-            <div id="status" class="status"></div>
+        <div>
+            <h3>Друг:</h3>
+            <video id="remoteVideo" autoplay playsinline></video>
+            <div id="remoteStatus"></div>
         </div>
     </div>
     
-    <script>
-        let localStream;
-        let peerConnection;
-        let currentOffer = null;
+    <div>
+        <button onclick="startSimpleCall()">1. СТАРТ (Я звоню)</button>
+        <button onclick="answerSimpleCall()">2. ОТВЕТ (Мне звонят)</button>
+    </div>
+    
+    <div id="qrcode"></div>
+    
+    <div class="debug">
+        <h3>Отладка:</h3>
+        <div id="debugLog"></div>
+    </div>
+
+<script>
+let localStream;
+let peerConnection;
+let isCaller = false;
+const debug = document.getElementById('debugLog');
+
+function log(msg) {
+    debug.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${msg}</div>`;
+    console.log(msg);
+}
+
+// 1. ПРОВЕРКА КАМЕРЫ
+async function checkCamera() {
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(d => d.kind === 'videoinput');
+        log(`Найдено камер: ${videoDevices.length}`);
         
-        // Показать статус
-        function showStatus(message, isSuccess = true) {
-            const statusEl = document.getElementById('status');
-            statusEl.textContent = message;
-            statusEl.className = 'status ' + (isSuccess ? 'status-success' : '');
-            statusEl.style.display = 'block';
-            setTimeout(() => {
-                statusEl.style.display = 'none';
-            }, 5000);
+        if (videoDevices.length === 0) {
+            alert("❌ Камера не найдена! Проверьте подключение.");
+            return false;
         }
+        return true;
+    } catch (e) {
+        log("Ошибка проверки камеры: " + e);
+        return false;
+    }
+}
+
+// 2. ЗАПУСК КАМЕРЫ
+async function startCamera() {
+    try {
+        log("Запрашиваю доступ к камере...");
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: "user"
+            },
+            audio: false
+        });
         
-        // 1. Начать звонок
-        async function startCall() {
-            try {
-                // Запросить доступ к камере
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { width: 640, height: 480 },
-                    audio: false 
-                });
-                
-                // Показать локальное видео
-                document.getElementById('localVideo').srcObject = localStream;
-                showStatus('✅ Камера подключена');
-                
-                // Создать соединение WebRTC
-                createPeerConnection();
-                
-                // Создать предложение
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                
-                // Сохранить предложение
-                currentOffer = offer;
-                
-                // Показать предложение для копирования
-                document.getElementById('offerText').value = JSON.stringify(offer, null, 2);
-                document.getElementById('offerBox').style.display = 'block';
-                document.getElementById('answerBox').style.display = 'block';
-                
-                showStatus('✅ Создано предложение. Скопируйте его и отправьте другу');
-                
-            } catch (error) {
-                showStatus('❌ Ошибка: ' + error.message, false);
+        document.getElementById('localVideo').srcObject = localStream;
+        document.getElementById('localStatus').innerHTML = "✅ Камера работает";
+        log("✅ Камера активирована");
+        return true;
+    } catch (e) {
+        log("❌ Ошибка камеры: " + e.message);
+        alert("Разрешите доступ к камере в настройках браузера!");
+        return false;
+    }
+}
+
+// 3. ПРОСТОЙ ЗВОНОК (Я инициатор)
+async function startSimpleCall() {
+    log("=== Я ИНИЦИАТОР ===");
+    isCaller = true;
+    
+    if (!await checkCamera()) return;
+    if (!await startCamera()) return;
+    
+    // Создаем соединение
+    createPeerConnection();
+    
+    // Создаем предложение
+    try {
+        const offer = await peerConnection.createOffer({
+            offerToReceiveVideo: true,
+            offerToReceiveAudio: false
+        });
+        await peerConnection.setLocalDescription(offer);
+        
+        // Генерируем короткую ссылку
+        const offerData = btoa(JSON.stringify(offer));
+        const link = `${window.location.origin}${window.location.pathname}#${offerData}`;
+        
+        log("✅ Предложение создано");
+        log("Отправьте эту ссылку другу:");
+        log(link);
+        
+        // Показываем QR-код
+        QRCode.toCanvas(document.getElementById('qrcode'), link, function (error) {
+            if (error) console.error(error);
+        });
+        
+        // Ждем ответа автоматически через URL hash
+        waitForAnswerInHash();
+        
+    } catch (e) {
+        log("Ошибка создания предложения: " + e);
+    }
+}
+
+// 4. ПРИНЯТЬ ЗВОНОК (Я получатель)
+async function answerSimpleCall() {
+    log("=== Я ПОЛУЧАТЕЛЬ ===");
+    isCaller = false;
+    
+    if (!await checkCamera()) return;
+    if (!await startCamera()) return;
+    
+    // Проверяем, есть ли предложение в URL
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        log("Найдено предложение в ссылке");
+        await processOfferFromHash(hash);
+    } else {
+        log("Жду предложение...");
+        // Ждем когда пользователь вставит предложение
+        const offerText = prompt("Вставьте ссылку или текст от друга:");
+        if (offerText) {
+            await processOffer(offerText);
+        }
+    }
+}
+
+// 5. ОБРАБОТАТЬ ПРЕДЛОЖЕНИЕ
+async function processOffer(offerData) {
+    try {
+        let offer;
+        // Если это base64 в ссылке
+        if (offerData.startsWith('ey')) { // JSON в base64
+            offer = JSON.parse(atob(offerData));
+        } else if (offerData.startsWith('{')) { // JSON напрямую
+            offer = JSON.parse(offerData);
+        } else {
+            // Пробуем извлечь из ссылки
+            const match = offerData.match(/#(.+)$/);
+            if (match) {
+                offer = JSON.parse(atob(match[1]));
             }
         }
         
-        // 2. Принять звонок
-        async function answerCall() {
-            try {
-                // Запросить доступ к камере
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { width: 640, height: 480 },
-                    audio: false 
-                });
-                
-                document.getElementById('localVideo').srcObject = localStream;
-                showStatus('✅ Камера подключена');
-                
-                // Показать поле для вставки предложения
-                document.getElementById('answerBox').style.display = 'block';
-                document.getElementById('answerText').focus();
-                
-                showStatus('✅ Вставьте предложение от друга в поле выше');
-                
-            } catch (error) {
-                showStatus('❌ Ошибка: ' + error.message, false);
-            }
-        }
+        log("Предложение получено");
         
-        // 3. Обработать ответ от друга
-        async function submitAnswer() {
-            try {
-                const answerText = document.getElementById('answerText').value.trim();
-                if (!answerText) {
-                    showStatus('❌ Вставьте текст ответа от друга', false);
-                    return;
-                }
-                
-                const answer = JSON.parse(answerText);
-                
-                if (!peerConnection) {
-                    createPeerConnection();
-                }
-                
-                // Если у нас уже есть локальное описание (мы звонивший)
-                if (peerConnection.localDescription) {
-                    // Установить ответ от друга
-                    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-                    showStatus('✅ Соединение установлено! Видеозвонок активен');
-                } else {
-                    // Если мы принимающий звонок
-                    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-                    const localAnswer = await peerConnection.createAnswer();
-                    await peerConnection.setLocalDescription(localAnswer);
-                    
-                    // Показать ответ для отправки обратно
-                    document.getElementById('offerText').value = JSON.stringify(localAnswer, null, 2);
-                    document.getElementById('offerBox').style.display = 'block';
-                    showStatus('✅ Ответ создан. Скопируйте и отправьте обратно другу');
-                }
-                
-            } catch (error) {
-                showStatus('❌ Ошибка: ' + error.message, false);
-            }
-        }
+        createPeerConnection();
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
         
-        // 4. Создать WebRTC соединение
-        function createPeerConnection() {
-            const config = {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' }
-                ]
-            };
-            
-            peerConnection = new RTCPeerConnection(config);
-            
-            // Добавить локальное видео в соединение
+        // Создаем ответ
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        
+        // Создаем ссылку с ответом
+        const answerData = btoa(JSON.stringify(answer));
+        const answerLink = `${window.location.origin}${window.location.pathname}#answer=${answerData}`;
+        
+        log("✅ Ответ создан");
+        log("Отправьте эту ссылку обратно:");
+        log(answerLink);
+        
+        // Показываем QR-код с ответом
+        QRCode.toCanvas(document.getElementById('qrcode'), answerLink, function (error) {
+            if (error) console.error(error);
+        });
+        
+    } catch (e) {
+        log("Ошибка обработки предложения: " + e);
+    }
+}
+
+// 6. ОЖИДАНИЕ ОТВЕТА В URL (для инициатора)
+function waitForAnswerInHash() {
+    function checkHash() {
+        const hash = window.location.hash;
+        if (hash.includes('answer=')) {
+            log("Найден ответ в ссылке!");
+            const answerData = hash.split('=')[1];
+            processAnswer(answerData);
+        } else {
+            setTimeout(checkHash, 1000);
+        }
+    }
+    checkHash();
+}
+
+// 7. ОБРАБОТАТЬ ОТВЕТ
+async function processAnswer(answerData) {
+    try {
+        const answer = JSON.parse(atob(answerData));
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+        log("✅ Соединение установлено!");
+        document.getElementById('remoteStatus').innerHTML = "✅ Соединено";
+    } catch (e) {
+        log("Ошибка обработки ответа: " + e);
+    }
+}
+
+// 8. ОБРАБОТАТЬ ПРЕДЛОЖЕНИЕ ИЗ HASH
+async function processOfferFromHash(hash) {
+    if (hash.startsWith('answer=')) {
+        // Это ответ, а не предложение
+        const answerData = hash.split('=')[1];
+        if (isCaller) {
+            await processAnswer(answerData);
+        }
+        return;
+    }
+    
+    // Это предложение
+    await processOffer(hash);
+}
+
+// 9. СОЗДАТЬ СОЕДИНЕНИЕ WebRTC
+function createPeerConnection() {
+    try {
+        // Используем публичные STUN серверы Google
+        const config = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun3.l.google.com:19302' },
+                { urls: 'stun:stun4.l.google.com:19302' }
+            ]
+        };
+        
+        log("Создаю WebRTC соединение...");
+        peerConnection = new RTCPeerConnection(config);
+        
+        // Добавить локальное видео
+        if (localStream) {
             localStream.getTracks().forEach(track => {
                 peerConnection.addTrack(track, localStream);
             });
-            
-            // Получить видео от друга
-            peerConnection.ontrack = (event) => {
-                if (document.getElementById('remoteVideo').srcObject) return;
-                document.getElementById('remoteVideo').srcObject = event.streams[0];
-                showStatus('✅ Видео друга подключено!');
-            };
-            
-            // Обработка ICE кандидатов (для NAT)
-            peerConnection.onicecandidate = (event) => {
-                if (event.candidate) {
-                    // Кандидаты отправляются автоматически через установленное соединение
-                }
-            };
-            
-            // Обработка состояния соединения
-            peerConnection.onconnectionstatechange = () => {
-                console.log('Состояние соединения:', peerConnection.connectionState);
-            };
         }
         
-        // 5. Копирование предложения в буфер обмена
-        async function copyOffer() {
-            const offerText = document.getElementById('offerText');
-            offerText.select();
-            offerText.setSelectionRange(0, 99999);
-            
-            try {
-                await navigator.clipboard.writeText(offerText.value);
-                showStatus('✅ Текст скопирован в буфер обмена!');
-            } catch (err) {
-                // Fallback для старых браузеров
-                document.execCommand('copy');
-                showStatus('✅ Текст скопирован!');
+        // Получить видео от друга
+        peerConnection.ontrack = (event) => {
+            log("Получаю видео от друга...");
+            if (!document.getElementById('remoteVideo').srcObject) {
+                document.getElementById('remoteVideo').srcObject = event.streams[0];
+                log("✅ Видео друга подключено!");
             }
+        };
+        
+        // Отладка ICE
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                log("ICE кандидат: " + event.candidate.candidate.substring(0, 50));
+            } else {
+                log("✅ ICE сборка завершена");
+            }
+        };
+        
+        peerConnection.oniceconnectionstatechange = () => {
+            log(`ICE состояние: ${peerConnection.iceConnectionState}`);
+        };
+        
+        peerConnection.onsignalingstatechange = () => {
+            log(`Signaling состояние: ${peerConnection.signalingState}`);
+        };
+        
+    } catch (e) {
+        log("Ошибка создания соединения: " + e);
+    }
+}
+
+// 10. АВТОПРОВЕРКА ПРИ ЗАГРУЗКЕ
+window.addEventListener('load', async () => {
+    log("Страница загружена");
+    log(`Браузер: ${navigator.userAgent}`);
+    
+    // Проверяем WebRTC поддержку
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("❌ Ваш браузер не поддерживает WebRTC!\nИспользуйте Chrome, Firefox или Edge");
+        return;
+    }
+    
+    // Проверяем камеру при загрузке
+    await checkCamera();
+    
+    // Проверяем URL на наличие данных
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        log("Обнаружены данные в URL");
+        if (hash.startsWith('answer=')) {
+            log("Это ответ на звонок");
+        } else {
+            log("Это предложение звонка");
         }
-    </script>
+    }
+});
+
+// 11. КОПИРОВАНИЕ ССЫЛКИ В БУФЕР
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        log("✅ Ссылка скопирована!");
+    });
+}
+</script>
+
+<div style="margin-top: 30px; padding: 15px; background: #e3f2fd; border-radius: 10px;">
+    <h3>📋 КАК ПОЛЬЗОВАТЬСЯ (проще некуда):</h3>
+    <ol>
+        <li><strong>На ПЕРВОМ устройстве:</strong> Нажми "1. СТАРТ" → Разреши камеру → <strong>Отправь QR-код другу</strong> (сфотографируй экран)</li>
+        <li><strong>На ВТОРОМ устройстве:</strong> Нажми "2. ОТВЕТ" → Разреши камеру → <strong>Отсканируй QR-код</strong> камерой телефона</li>
+        <li><strong>Вернись на первое устройство</strong> и отсканируй QR-код от второго</li>
+        <li><strong>ГОТОВО! Видеосвязь работает! и создатель CryptoCat</strong></li>
+    </ol>
+    <p style="color: #d32f2f; font-weight: bold;">
+        ⚠️ Если не работает: 1) Проверьте камеру 2) Используйте один браузер (Chrome лучше всего) 3) Будьте в одной сети Wi-Fi
+    </p>
+</div>
+
 </body>
 </html>
