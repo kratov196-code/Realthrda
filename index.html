@@ -2,57 +2,74 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Мемори: Словарь сложных слов</title>
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            padding: 15px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #333;
+            touch-action: manipulation;
         }
 
         h1 {
             color: #2c3e50;
-            margin-bottom: 5px;
+            font-size: 1.4rem;
             text-align: center;
+            margin-bottom: 8px;
+            padding: 0 10px;
+            line-height: 1.3;
         }
 
         .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 25px;
+            color: #5d6d7e;
+            font-size: 0.85rem;
             text-align: center;
-            max-width: 800px;
+            margin-bottom: 20px;
+            padding: 0 15px;
             line-height: 1.4;
+            max-width: 500px;
         }
 
         .game-info {
             display: flex;
-            justify-content: space-between;
-            width: 90%;
-            max-width: 900px;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
             margin-bottom: 20px;
             background: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .player-turn-container {
+            width: 100%;
+            text-align: center;
         }
 
         .player-turn {
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 8px 20px;
-            border-radius: 30px;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            min-width: 200px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         .player1 {
@@ -69,16 +86,22 @@
 
         .scores {
             display: flex;
-            gap: 30px;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
         }
 
         .score {
-            font-size: 1.1em;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .score span {
+        .score-value {
             font-weight: bold;
-            font-size: 1.4em;
+            font-size: 1.8rem;
+            margin-top: 5px;
         }
 
         #score1 { color: #1565c0; }
@@ -86,42 +109,64 @@
 
         .game-container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 90%;
-            max-width: 900px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
             perspective: 1000px;
+            padding: 0 5px;
         }
 
-        @media (max-width: 768px) {
+        /* На планшетах и ПК делаем больше колонок */
+        @media (min-width: 500px) {
             .game-container {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 768px) {
             .game-container {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .game-container {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 15px;
+                max-width: 900px;
             }
         }
 
         .card {
-            height: 130px;
+            height: 140px;
             background-color: #34495e;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8em;
-            color: white;
+            border-radius: 12px;
             cursor: pointer;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             user-select: none;
+            aspect-ratio: 3/4;
+        }
+
+        /* Увеличиваем карточки на очень маленьких экранах */
+        @media (max-width: 350px) {
+            .card {
+                height: 120px;
+            }
         }
 
         .card-face {
@@ -129,12 +174,12 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             overflow: hidden;
         }
@@ -142,16 +187,16 @@
         .card-front {
             background: linear-gradient(145deg, #2c3e50, #4a6491);
             color: white;
-            font-weight: bold;
             transform: rotateY(180deg);
-            font-size: 0.9em;
-            line-height: 1.3;
+            justify-content: flex-start;
+            padding-top: 15px;
         }
 
         .card-back {
             background: linear-gradient(145deg, #3498db, #2980b9);
-            font-size: 2em;
             color: white;
+            font-size: 2.2rem;
+            font-weight: bold;
         }
 
         .card.flipped {
@@ -161,64 +206,99 @@
         .card.matched {
             visibility: hidden;
             opacity: 0;
-            transition: visibility 0s 0.6s, opacity 0.6s;
+            transform: scale(0.8);
+            transition: all 0.5s ease;
             cursor: default;
         }
 
-        .word {
-            font-size: 1em;
-            margin-bottom: 8px;
+        .card-type {
+            font-size: 0.7rem;
             color: #f1c40f;
-            font-weight: bold;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 2px 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .card-content {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .word {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         .definition {
-            font-size: 0.65em;
+            font-size: 0.75rem;
             color: #ecf0f1;
-            line-height: 1.2;
+            line-height: 1.3;
+            word-break: break-word;
         }
 
         .controls {
-            margin-top: 10px;
+            margin-top: 5px;
+            width: 100%;
+            max-width: 500px;
+            padding: 0 15px;
         }
 
         button {
-            background-color: #27ae60;
+            background: linear-gradient(145deg, #27ae60, #219653);
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 1.1em;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-        }
-
-        button:hover {
-            background-color: #219653;
-            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            width: 100%;
+            letter-spacing: 0.5px;
         }
 
         button:active {
-            transform: translateY(0);
+            transform: translateY(2px);
+            box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
         }
 
         .message {
-            margin-top: 20px;
-            font-size: 1.3em;
-            height: 30px;
-            font-weight: bold;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
             text-align: center;
             color: #2c3e50;
-            min-height: 1.5em;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            width: 100%;
+            max-width: 500px;
         }
 
         .match-message {
-            background-color: #2ecc71;
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            animation: pulse 0.5s;
+            padding: 10px 20px;
+            border-radius: 25px;
+            animation: pulse 0.5s ease;
+            box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
         }
 
         @keyframes pulse {
@@ -226,17 +306,49 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 15px;
+            padding: 0 15px;
+            line-height: 1.4;
+        }
+
+        /* Скроллбар для карточек */
+        .card-content::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+
+        .card-content::-webkit-scrollbar-thumb {
+            background: #f1c40f;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
     <h1>🎴 Мемори: Словарь сложных слов</h1>
-    <p class="subtitle">Найдите пары: слово и его определение. Соперники видят ваши ходы. При нахождении пары — вы получаете дополнительный ход!</p>
+    <p class="subtitle">Найдите пары: слово ↔ определение. При нахождении пары — дополнительный ход!</p>
 
     <div class="game-info">
-        <div class="player-turn player1" id="turn-indicator">Сейчас ходит: Игрок 1</div>
+        <div class="player-turn-container">
+            <div class="player-turn player1" id="turn-indicator">Ход: Игрок 1</div>
+        </div>
         <div class="scores">
-            <div class="score">Игрок 1: <span id="score1">0</span></div>
-            <div class="score">Игрок 2: <span id="score2">0</span></div>
+            <div class="score">
+                <div>Игрок 1</div>
+                <div class="score-value" id="score1">0</div>
+            </div>
+            <div class="score">
+                <div>Игрок 2</div>
+                <div class="score-value" id="score2">0</div>
+            </div>
         </div>
     </div>
 
@@ -244,48 +356,50 @@
         <!-- Карточки будут созданы здесь скриптом -->
     </div>
 
-    <div class="message" id="message"></div>
+    <div class="message" id="message">Игрок 1 начинает. Нажмите на карточку!</div>
 
     <div class="controls">
-        <button onclick="restartGame()">🔄 Начать новую игру</button>
+        <button onclick="restartGame()">🔄 Новая игра</button>
     </div>
 
+    <p class="footer-note">Игра для двух игроков на одном устройстве. Ходы видны обоим игрокам.</p>
+
     <script>
-        // Массив карточек: каждая карточка - объект с id, словом и определением
+        // Массив карточек
         const cardData = [
-            { id: 1, word: "Эгрэгор", definition: "коллективное психическое поле (эзотерика)." },
-            { id: 2, word: "Энигма", definition: "загадка." },
-            { id: 3, word: "Оксюморон", definition: "сочетание несочетаемого («живой труп»)." },
-            { id: 4, word: "Панегирик", definition: "хвалебная речь." },
-            { id: 5, word: "Квинтэссенция", definition: "самая суть." },
-            { id: 6, word: "Эскалация", definition: "наращивание, обострение." },
-            { id: 7, word: "Атараксия", definition: "душевное спокойствие." },
-            { id: 8, word: "Метанойя", definition: "резкое изменение образа мыслей." },
-            { id: 9, word: "Палимпсест", definition: "рукопись поверх старого текста." },
-            { id: 10, word: "Экзистенциальный", definition: "относящийся к существованию." },
-            { id: 11, word: "Девиант", definition: "отклоняющийся от нормы." },
-            { id: 12, word: "Флигель", definition: "боковая пристройка к дому." },
-            { id: 13, word: "Аберрация", definition: "искажение, отклонение от нормы." },
-            { id: 14, word: "Когнитивный диссонанс", definition: "дискомфорт от противоречивых мыслей." },
-            { id: 15, word: "Перцепция", definition: "восприятие." },
-            { id: 16, word: "Инсинуация", definition: "коварный намёк, исподволь." },
-            { id: 17, word: "Солипсизм", definition: "философская идея «существую только я»." },
-            { id: 18, word: "Эвтаназия", definition: "лёгкая смерть (мед. контекст)." },
-            { id: 19, word: "Аннигиляция", definition: "полное уничтожение." },
-            { id: 20, word: "Инфернальный", definition: "адский, дьявольский." },
-            { id: 21, word: "Эфемерный", definition: "мимолётный, недолговечный." },
-            { id: 22, word: "Трансцендентный", definition: "выходящий за пределы обычного опыта." },
-            { id: 23, word: "Идиосинкразия", definition: "индивидуальная непереносимость (или странность)." },
-            { id: 24, word: "Эскапада", definition: "рискованная, сумасбродная выходка." },
-            { id: 25, word: "Серебряная пуля", definition: "магическое, решающее средство." },
-            { id: 26, word: "Эвфемизм", definition: "мягкое слово вместо грубого (например, «отошёл» вместо «умер»)." },
-            { id: 27, word: "Апория", definition: "логическое затруднение, тупик." },
-            { id: 28, word: "Каламбур", definition: "игра слов." },
-            { id: 29, word: "Лимб", definition: "забытое, промежуточное состояние." },
-            { id: 30, word: "Флюид", definition: "нечто текучее, неосязаемое (как мысли)." }
+            { id: 1, word: "Эгрэгор", definition: "Коллективное психическое поле" },
+            { id: 2, word: "Энигма", definition: "Загадка, неразрешимая задача" },
+            { id: 3, word: "Оксюморон", definition: "Сочетание несочетаемого" },
+            { id: 4, word: "Панегирик", definition: "Хвалебная, восторженная речь" },
+            { id: 5, word: "Квинтэссенция", definition: "Самая суть, основа основ" },
+            { id: 6, word: "Эскалация", definition: "Наращивание, обострение" },
+            { id: 7, word: "Атараксия", definition: "Душевное спокойствие, невозмутимость" },
+            { id: 8, word: "Метанойя", definition: "Резкое изменение образа мыслей" },
+            { id: 9, word: "Палимпсест", definition: "Рукопись поверх старого текста" },
+            { id: 10, word: "Экзистенциальный", definition: "Относящийся к существованию" },
+            { id: 11, word: "Девиант", definition: "Отклоняющийся от нормы" },
+            { id: 12, word: "Флигель", definition: "Боковая пристройка к дому" },
+            { id: 13, word: "Аберрация", definition: "Искажение, отклонение от нормы" },
+            { id: 14, word: "Когнитивный диссонанс", definition: "Дискомфорт от противоречивых мыслей" },
+            { id: 15, word: "Перцепция", definition: "Восприятие, осознание" },
+            { id: 16, word: "Инсинуация", definition: "Коварный намёк, исподволь" },
+            { id: 17, word: "Солипсизм", definition: "Философская идея «существую только я»" },
+            { id: 18, word: "Эвтаназия", definition: "Лёгкая смерть (в медицинском контексте)" },
+            { id: 19, word: "Аннигиляция", definition: "Полное уничтожение, исчезновение" },
+            { id: 20, word: "Инфернальный", definition: "Адский, дьявольский" },
+            { id: 21, word: "Эфемерный", definition: "Мимолётный, недолговечный" },
+            { id: 22, word: "Трансцендентный", definition: "Выходящий за пределы обычного опыта" },
+            { id: 23, word: "Идиосинкразия", definition: "Индивидуальная непереносимость" },
+            { id: 24, word: "Эскапада", definition: "Рискованная, сумасбродная выходка" },
+            { id: 25, word: "Серебряная пуля", definition: "Магическое, решающее средство" },
+            { id: 26, word: "Эвфемизм", definition: "Мягкое слово вместо грубого" },
+            { id: 27, word: "Апория", definition: "Логическое затруднение, тупик" },
+            { id: 28, word: "Каламбур", definition: "Игра слов, шутка" },
+            { id: 29, word: "Лимб", definition: "Забытое, промежуточное состояние" },
+            { id: 30, word: "Флюид", definition: "Нечто текучее, неосязаемое" }
         ];
 
-        // Создаем колоду из пар (две карточки на каждое слово)
+        // Создаем колоду
         let cards = [];
         cardData.forEach(item => {
             // Карточка со словом
@@ -293,13 +407,15 @@
                 id: item.id,
                 type: 'word',
                 content: item.word,
+                definition: item.definition,
                 pairId: item.id
             });
             // Карточка с определением
             cards.push({
-                id: item.id + 100, // уникальный id для пары
+                id: item.id + 100,
                 type: 'definition',
-                content: item.definition,
+                content: item.word,
+                definition: item.definition,
                 pairId: item.id
             });
         });
@@ -310,6 +426,7 @@
         let currentPlayer = 1;
         let scores = { 1: 0, 2: 0 };
         let canFlip = true;
+        let gameStarted = false;
 
         // Элементы DOM
         const gameBoard = document.getElementById('game-board');
@@ -320,24 +437,22 @@
 
         // Инициализация игры
         function initGame() {
-            // Очистка
             gameBoard.innerHTML = '';
             flippedCards = [];
             matchedPairs = [];
             scores = { 1: 0, 2: 0 };
             currentPlayer = 1;
             canFlip = true;
+            gameStarted = true;
 
-            // Обновление интерфейса
             updateScores();
             updateTurnIndicator();
-            messageElement.textContent = 'Игрок 1 начинает. Нажмите на карточку!';
-            messageElement.className = 'message';
+            showMessage('Игрок 1 начинает. Нажмите на карточку!', false);
 
             // Перемешивание карточек
             let shuffledCards = [...cards].sort(() => Math.random() - 0.5);
 
-            // Создание карточек на доске
+            // Создание карточек
             shuffledCards.forEach((card, index) => {
                 const cardElement = document.createElement('div');
                 cardElement.className = 'card';
@@ -346,39 +461,65 @@
                 cardElement.dataset.pairId = card.pairId;
                 cardElement.dataset.type = card.type;
 
+                // Определяем заголовок в зависимости от типа карточки
+                const cardTitle = card.type === 'word' ? 'СЛОВО' : 'ОПРЕДЕЛЕНИЕ';
+                const mainContent = card.type === 'word' ? card.content : card.definition;
+                const secondaryContent = card.type === 'word' ? card.definition : card.content;
+
                 cardElement.innerHTML = `
                     <div class="card-face card-back">?</div>
                     <div class="card-face card-front">
-                        <div class="word">${card.type === 'word' ? card.content : ''}</div>
-                        <div class="definition">${card.type === 'definition' ? card.content : card.content}</div>
+                        <div class="card-type">${cardTitle}</div>
+                        <div class="card-content">
+                            <div class="word">${mainContent}</div>
+                            <div class="definition">${secondaryContent}</div>
+                        </div>
                     </div>
                 `;
 
                 cardElement.addEventListener('click', () => flipCard(cardElement));
                 gameBoard.appendChild(cardElement);
             });
+
+            // Адаптация размера карточек под экран
+            adjustCardSize();
+        }
+
+        // Адаптация размера карточек
+        function adjustCardSize() {
+            const cards = document.querySelectorAll('.card');
+            const container = document.querySelector('.game-container');
+            if (!container || cards.length === 0) return;
+
+            const containerWidth = container.clientWidth;
+            const gap = window.innerWidth < 500 ? 10 : 12;
+            const columns = window.getComputedStyle(container).gridTemplateColumns.split(' ').length;
+            
+            // Рассчитываем максимальную высоту
+            const cardWidth = (containerWidth - (gap * (columns - 1))) / columns;
+            const cardHeight = Math.min(cardWidth * 1.33, 160); // Максимальная высота 160px
+            
+            cards.forEach(card => {
+                card.style.height = `${cardHeight}px`;
+            });
         }
 
         // Переворот карточки
         function flipCard(cardElement) {
-            // Проверки: можно ли переворачивать, не перевернута ли уже, не собрана ли
-            if (!canFlip || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
+            if (!canFlip || cardElement.classList.contains('flipped') || 
+                cardElement.classList.contains('matched') || !gameStarted) {
                 return;
             }
 
-            // Переворачиваем
             cardElement.classList.add('flipped');
             flippedCards.push(cardElement);
 
-            // Показываем сообщение о том, что перевернули
-            const cardType = cardElement.dataset.type === 'word' ? 'Слово' : 'Определение';
-            messageElement.textContent = `Игрок ${currentPlayer} открыл: ${cardType}`;
-            messageElement.className = 'message';
+            const cardType = cardElement.dataset.type === 'word' ? 'слово' : 'определение';
+            showMessage(`Игрок ${currentPlayer} открыл ${cardType}`, false);
 
-            // Если перевернули две карточки
             if (flippedCards.length === 2) {
                 canFlip = false;
-                setTimeout(checkForMatch, 800);
+                setTimeout(checkForMatch, 700);
             }
         }
 
@@ -393,38 +534,28 @@
                 card2.classList.add('matched');
                 matchedPairs.push(card1.dataset.pairId);
 
-                // Начисление очков
                 scores[currentPlayer]++;
                 updateScores();
 
-                // Сообщение об успехе
-                messageElement.textContent = `Игрок ${currentPlayer} нашёл пару! +1 очко. Ещё ход!`;
-                messageElement.classList.add('match-message');
+                showMessage(`Игрок ${currentPlayer} нашёл пару! +1 очко. Ещё ход!`, true);
 
-                // Очистка перевернутых карточек
                 flippedCards = [];
 
-                // Проверка на конец игры
                 if (matchedPairs.length === cardData.length) {
                     endGame();
                     return;
                 }
 
-                // Даём дополнительный ход тому же игроку
                 canFlip = true;
-                // Индикатор хода не меняем
             } else {
                 // Не совпали
-                messageElement.textContent = `Не совпало. Ход переходит к Игроку ${currentPlayer === 1 ? 2 : 1}.`;
-                messageElement.className = 'message';
+                showMessage(`Не совпало. Ход переходит к Игроку ${currentPlayer === 1 ? 2 : 1}.`, false);
 
-                // Переворачиваем обратно с задержкой
                 setTimeout(() => {
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
                     flippedCards = [];
 
-                    // Меняем игрока
                     currentPlayer = currentPlayer === 1 ? 2 : 1;
                     updateTurnIndicator();
                     canFlip = true;
@@ -435,6 +566,8 @@
         // Конец игры
         function endGame() {
             canFlip = false;
+            gameStarted = false;
+            
             let winnerText;
             if (scores[1] > scores[2]) {
                 winnerText = "🎉 Игрок 1 победил!";
@@ -444,13 +577,18 @@
                 winnerText = "🤝 Ничья!";
             }
 
-            messageElement.innerHTML = `<strong>Игра окончена! ${winnerText}</strong><br>Слова изучены, мозг прокачан!`;
-            messageElement.className = 'message';
+            showMessage(`Игра окончена! ${winnerText}<br>Счёт: ${scores[1]} : ${scores[2]}`, true);
+        }
+
+        // Показать сообщение
+        function showMessage(text, isMatch) {
+            messageElement.innerHTML = text;
+            messageElement.className = isMatch ? 'message match-message' : 'message';
         }
 
         // Обновление индикатора хода
         function updateTurnIndicator() {
-            turnIndicator.textContent = `Сейчас ходит: Игрок ${currentPlayer}`;
+            turnIndicator.textContent = `Ход: Игрок ${currentPlayer}`;
             turnIndicator.className = `player-turn player${currentPlayer}`;
         }
 
@@ -465,8 +603,20 @@
             initGame();
         }
 
-        // Запуск игры при загрузке
-        window.onload = initGame;
+        // Обработка изменения размера окна
+        window.addEventListener('resize', adjustCardSize);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(adjustCardSize, 100);
+        });
+
+        // Запуск игры
+        window.onload = function() {
+            initGame();
+            // На телефонах добавляем задержку для корректного расчета размеров
+            if (window.innerWidth <= 768) {
+                setTimeout(adjustCardSize, 100);
+            }
+        };
     </script>
 </body>
-</html>
+    </html>
