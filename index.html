@@ -3,499 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLOB Video Player</title>
+    <title>Мемори: Словарь сложных слов</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-        }
-        
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
-            color: white;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .input-section {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .url-input {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .url-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
-        }
-        
-        .buttons {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
         }
-        
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.4;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 900px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .player-turn {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 30px;
             transition: all 0.3s ease;
+        }
+
+        .player1 {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #1565c0;
+        }
+
+        .player2 {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 2px solid #c62828;
+        }
+
+        .scores {
+            display: flex;
+            gap: 30px;
+        }
+
+        .score {
+            font-size: 1.1em;
+        }
+
+        .score span {
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+
+        #score1 { color: #1565c0; }
+        #score2 { color: #c62828; }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 90%;
+            max-width: 900px;
+            margin-bottom: 25px;
+            perspective: 1000px;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            height: 130px;
+            background-color: #34495e;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        
-        .play-btn {
-            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            justify-content: center;
+            font-size: 1.8em;
             color: white;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            position: relative;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            user-select: none;
         }
-        
-        .play-btn:hover {
-            background: linear-gradient(45deg, #43A047, #1B5E20);
-            transform: translateY(-2px);
-        }
-        
-        .load-btn {
-            background: linear-gradient(45deg, #2196F3, #0D47A1);
-            color: white;
-        }
-        
-        .load-btn:hover {
-            background: linear-gradient(45deg, #1E88E5, #0D47A1);
-            transform: translateY(-2px);
-        }
-        
-        .download-btn {
-            background: linear-gradient(45deg, #FF9800, #E65100);
-            color: white;
-        }
-        
-        .download-btn:hover {
-            background: linear-gradient(45deg, #FB8C00, #BF360C);
-            transform: translateY(-2px);
-        }
-        
-        .clear-btn {
-            background: linear-gradient(45deg, #F44336, #B71C1C);
-            color: white;
-        }
-        
-        .clear-btn:hover {
-            background: linear-gradient(45deg, #E53935, #880E4F);
-            transform: translateY(-2px);
-        }
-        
-        .player-section {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
-        video {
+
+        .card-face {
+            position: absolute;
             width: 100%;
-            max-height: 600px;
+            height: 100%;
+            backface-visibility: hidden;
             border-radius: 10px;
-            background: black;
-            display: none;
-        }
-        
-        .status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 14px;
-            display: none;
+            text-align: center;
+            overflow: hidden;
         }
-        
-        .status.success {
-            background: rgba(76, 175, 80, 0.3);
-            border-left: 4px solid #4CAF50;
-        }
-        
-        .status.error {
-            background: rgba(244, 67, 54, 0.3);
-            border-left: 4px solid #F44336;
-        }
-        
-        .info {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-        
-        .info h3 {
-            margin-bottom: 15px;
-            color: #FFD700;
-        }
-        
-        .info ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .info li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .info li:last-child {
-            border-bottom: none;
-        }
-        
-        .info code {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: #FFD700;
-        }
-        
-        .recent-links {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-        
-        .recent-links h3 {
-            margin-bottom: 15px;
-            color: #00E5FF;
-        }
-        
-        .recent-link {
-            display: block;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 8px;
-            text-decoration: none;
+
+        .card-front {
+            background: linear-gradient(145deg, #2c3e50, #4a6491);
             color: white;
-            word-break: break-all;
-            transition: background 0.3s;
+            font-weight: bold;
+            transform: rotateY(180deg);
+            font-size: 0.9em;
+            line-height: 1.3;
         }
-        
-        .recent-link:hover {
-            background: rgba(255, 255, 255, 0.25);
+
+        .card-back {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            font-size: 2em;
+            color: white;
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .buttons {
-                flex-direction: column;
-            }
-            
-            button {
-                width: 100%;
-                justify-content: center;
-            }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.6s, opacity 0.6s;
+            cursor: default;
+        }
+
+        .word {
+            font-size: 1em;
+            margin-bottom: 8px;
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
+        .definition {
+            font-size: 0.65em;
+            color: #ecf0f1;
+            line-height: 1.2;
+        }
+
+        .controls {
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        button:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.3em;
+            height: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #2c3e50;
+            min-height: 1.5em;
+        }
+
+        .match-message {
+            background-color: #2ecc71;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            animation: pulse 0.5s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎬 BLOB Video Player</h1>
-        
-        <div class="input-section">
-            <input type="text" 
-                   class="url-input" 
-                   id="blobUrl" 
-                   placeholder="Вставьте BLOB ссылку сюда (например: blob:https://web.telegram.org/...)">
-            
-            <div class="buttons">
-                <button class="play-btn" onclick="playVideo()">
-                    ▶️ Воспроизвести
-                </button>
-                <button class="load-btn" onclick="loadFromTelegram()">
-                    🔗 Из Telegram
-                </button>
-                <button class="download-btn" onclick="downloadVideo()">
-                    ⬇️ Скачать
-                </button>
-                <button class="clear-btn" onclick="clearAll()">
-                    🗑️ Очистить
-                </button>
-            </div>
-        </div>
-        
-        <div class="player-section">
-            <video id="videoPlayer" controls></video>
-            <div class="status" id="status"></div>
-        </div>
-        
-        <div class="recent-links">
-            <h3>📋 Последние BLOB ссылки:</h3>
-            <div id="recentLinks"></div>
-        </div>
-        
-        <div class="info">
-            <h3>ℹ️ Как использовать:</h3>
-            <ul>
-                <li>1. Скопируйте BLOB ссылку из Telegram (F12 → Network)</li>
-                <li>2. Вставьте в поле выше и нажмите "Воспроизвести"</li>
-                <li>3. Или нажмите "Из Telegram" для автоматического поиска</li>
-                <li>4. Используйте "Скачать" чтобы сохранить видео</li>
-                <li><strong>Пример BLOB ссылки:</strong> <code>blob:https://web.telegram.org/abcdef12-3456-7890...</code></li>
-            </ul>
+    <h1>🎴 Мемори: Словарь сложных слов</h1>
+    <p class="subtitle">Найдите пары: слово и его определение. Соперники видят ваши ходы. При нахождении пары — вы получаете дополнительный ход!</p>
+
+    <div class="game-info">
+        <div class="player-turn player1" id="turn-indicator">Сейчас ходит: Игрок 1</div>
+        <div class="scores">
+            <div class="score">Игрок 1: <span id="score1">0</span></div>
+            <div class="score">Игрок 2: <span id="score2">0</span></div>
         </div>
     </div>
 
+    <div class="game-container" id="game-board">
+        <!-- Карточки будут созданы здесь скриптом -->
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <div class="controls">
+        <button onclick="restartGame()">🔄 Начать новую игру</button>
+    </div>
+
     <script>
-        // Хранилище для ссылок
-        let recentLinks = JSON.parse(localStorage.getItem('blob_links') || '[]');
-        let currentBlobUrl = '';
-        
-        // Инициализация
-        function init() {
-            updateRecentLinks();
-            
-            // Автоматическое определение из URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const blobParam = urlParams.get('blob');
-            if (blobParam) {
-                document.getElementById('blobUrl').value = blobParam;
-                playVideo();
-            }
-        }
-        
-        // Воспроизведение видео
-        function playVideo() {
-            const url = document.getElementById('blobUrl').value.trim();
-            const video = document.getElementById('videoPlayer');
-            const status = document.getElementById('status');
-            
-            if (!url) {
-                showStatus('⚠️ Введите BLOB ссылку!', 'error');
-                return;
-            }
-            
-            if (!url.startsWith('blob:')) {
-                showStatus('❌ Это не BLOB ссылка! Должно начинаться с "blob:"', 'error');
-                return;
-            }
-            
-            try {
-                // Сохраняем ссылку
-                saveLink(url);
-                currentBlobUrl = url;
-                
-                // Устанавливаем источник видео
-                video.src = url;
-                video.style.display = 'block';
-                
-                // Обработчики событий
-                video.onloadeddata = () => {
-                    showStatus(`✅ Видео загружено! Размер: ${formatBytes(getBlobSize(url))}`, 'success');
-                    video.play().catch(e => {
-                        showStatus(`⚠️ Автовоспроизведение заблокировано. Нажмите play вручную.`, 'error');
-                    });
-                };
-                
-                video.onerror = () => {
-                    showStatus('❌ Ошибка загрузки видео. Возможно ссылка недействительна.', 'error');
-                };
-                
-                showStatus('⏳ Загрузка видео...', '');
-                
-            } catch (error) {
-                showStatus(`❌ Ошибка: ${error.message}`, 'error');
-            }
-        }
-        
-        // Загрузка из Telegram
-        function loadFromTelegram() {
-            showStatus('🔍 Поиск BLOB ссылок в текущей вкладке...', '');
-            
-            // Открываем Telegram в iframe
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = 'https://web.telegram.org/';
-            document.body.appendChild(iframe);
-            
-            setTimeout(() => {
-                try {
-                    const telegramWindow = iframe.contentWindow;
-                    
-                    // Ищем видео элементы
-                    const videos = telegramWindow.document.querySelectorAll('video[src^="blob:"]');
-                    
-                    if (videos.length > 0) {
-                        const blobUrl = videos[0].src;
-                        document.getElementById('blobUrl').value = blobUrl;
-                        showStatus(`✅ Найдено ${videos.length} BLOB видео`, 'success');
-                        playVideo();
-                    } else {
-                        showStatus('❌ BLOB видео не найдены. Откройте видео в Telegram сначала.', 'error');
-                    }
-                    
-                } catch (error) {
-                    showStatus('❌ Не удалось получить доступ к Telegram (CORS)', 'error');
-                }
-                
-                document.body.removeChild(iframe);
-            }, 2000);
-        }
-        
-        // Скачивание видео
-        function downloadVideo() {
-            if (!currentBlobUrl) {
-                showStatus('⚠️ Сначала загрузите видео!', 'error');
-                return;
-            }
-            
-            fetch(currentBlobUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `blob_video_${Date.now()}.mp4`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    showStatus(`✅ Видео скачивается (${formatBytes(blob.size)})`, 'success');
-                })
-                .catch(error => {
-                    showStatus(`❌ Ошибка скачивания: ${error.message}`, 'error');
-                });
-        }
-        
-        // Сохранение ссылки в истории
-        function saveLink(url) {
-            if (!recentLinks.includes(url)) {
-                recentLinks.unshift(url);
-                if (recentLinks.length > 10) recentLinks.pop();
-                localStorage.setItem('blob_links', JSON.stringify(recentLinks));
-                updateRecentLinks();
-            }
-        }
-        
-        // Обновление списка ссылок
-        function updateRecentLinks() {
-            const container = document.getElementById('recentLinks');
-            container.innerHTML = '';
-            
-            recentLinks.forEach(link => {
-                const linkEl = document.createElement('a');
-                linkEl.href = '#';
-                linkEl.className = 'recent-link';
-                linkEl.textContent = link;
-                linkEl.onclick = (e) => {
-                    e.preventDefault();
-                    document.getElementById('blobUrl').value = link;
-                    playVideo();
-                };
-                container.appendChild(linkEl);
+        // Массив карточек: каждая карточка - объект с id, словом и определением
+        const cardData = [
+            { id: 1, word: "Эгрэгор", definition: "коллективное психическое поле (эзотерика)." },
+            { id: 2, word: "Энигма", definition: "загадка." },
+            { id: 3, word: "Оксюморон", definition: "сочетание несочетаемого («живой труп»)." },
+            { id: 4, word: "Панегирик", definition: "хвалебная речь." },
+            { id: 5, word: "Квинтэссенция", definition: "самая суть." },
+            { id: 6, word: "Эскалация", definition: "наращивание, обострение." },
+            { id: 7, word: "Атараксия", definition: "душевное спокойствие." },
+            { id: 8, word: "Метанойя", definition: "резкое изменение образа мыслей." },
+            { id: 9, word: "Палимпсест", definition: "рукопись поверх старого текста." },
+            { id: 10, word: "Экзистенциальный", definition: "относящийся к существованию." },
+            { id: 11, word: "Девиант", definition: "отклоняющийся от нормы." },
+            { id: 12, word: "Флигель", definition: "боковая пристройка к дому." },
+            { id: 13, word: "Аберрация", definition: "искажение, отклонение от нормы." },
+            { id: 14, word: "Когнитивный диссонанс", definition: "дискомфорт от противоречивых мыслей." },
+            { id: 15, word: "Перцепция", definition: "восприятие." },
+            { id: 16, word: "Инсинуация", definition: "коварный намёк, исподволь." },
+            { id: 17, word: "Солипсизм", definition: "философская идея «существую только я»." },
+            { id: 18, word: "Эвтаназия", definition: "лёгкая смерть (мед. контекст)." },
+            { id: 19, word: "Аннигиляция", definition: "полное уничтожение." },
+            { id: 20, word: "Инфернальный", definition: "адский, дьявольский." },
+            { id: 21, word: "Эфемерный", definition: "мимолётный, недолговечный." },
+            { id: 22, word: "Трансцендентный", definition: "выходящий за пределы обычного опыта." },
+            { id: 23, word: "Идиосинкразия", definition: "индивидуальная непереносимость (или странность)." },
+            { id: 24, word: "Эскапада", definition: "рискованная, сумасбродная выходка." },
+            { id: 25, word: "Серебряная пуля", definition: "магическое, решающее средство." },
+            { id: 26, word: "Эвфемизм", definition: "мягкое слово вместо грубого (например, «отошёл» вместо «умер»)." },
+            { id: 27, word: "Апория", definition: "логическое затруднение, тупик." },
+            { id: 28, word: "Каламбур", definition: "игра слов." },
+            { id: 29, word: "Лимб", definition: "забытое, промежуточное состояние." },
+            { id: 30, word: "Флюид", definition: "нечто текучее, неосязаемое (как мысли)." }
+        ];
+
+        // Создаем колоду из пар (две карточки на каждое слово)
+        let cards = [];
+        cardData.forEach(item => {
+            // Карточка со словом
+            cards.push({
+                id: item.id,
+                type: 'word',
+                content: item.word,
+                pairId: item.id
+            });
+            // Карточка с определением
+            cards.push({
+                id: item.id + 100, // уникальный id для пары
+                type: 'definition',
+                content: item.definition,
+                pairId: item.id
+            });
+        });
+
+        // Игровые переменные
+        let flippedCards = [];
+        let matchedPairs = [];
+        let currentPlayer = 1;
+        let scores = { 1: 0, 2: 0 };
+        let canFlip = true;
+
+        // Элементы DOM
+        const gameBoard = document.getElementById('game-board');
+        const turnIndicator = document.getElementById('turn-indicator');
+        const score1Element = document.getElementById('score1');
+        const score2Element = document.getElementById('score2');
+        const messageElement = document.getElementById('message');
+
+        // Инициализация игры
+        function initGame() {
+            // Очистка
+            gameBoard.innerHTML = '';
+            flippedCards = [];
+            matchedPairs = [];
+            scores = { 1: 0, 2: 0 };
+            currentPlayer = 1;
+            canFlip = true;
+
+            // Обновление интерфейса
+            updateScores();
+            updateTurnIndicator();
+            messageElement.textContent = 'Игрок 1 начинает. Нажмите на карточку!';
+            messageElement.className = 'message';
+
+            // Перемешивание карточек
+            let shuffledCards = [...cards].sort(() => Math.random() - 0.5);
+
+            // Создание карточек на доске
+            shuffledCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.dataset.cardId = card.id;
+                cardElement.dataset.pairId = card.pairId;
+                cardElement.dataset.type = card.type;
+
+                cardElement.innerHTML = `
+                    <div class="card-face card-back">?</div>
+                    <div class="card-face card-front">
+                        <div class="word">${card.type === 'word' ? card.content : ''}</div>
+                        <div class="definition">${card.type === 'definition' ? card.content : card.content}</div>
+                    </div>
+                `;
+
+                cardElement.addEventListener('click', () => flipCard(cardElement));
+                gameBoard.appendChild(cardElement);
             });
         }
-        
-        // Показать статус
-        function showStatus(message, type) {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = 'status';
-            status.style.display = 'block';
-            
-            if (type === 'success') status.classList.add('success');
-            if (type === 'error') status.classList.add('error');
-            
-            setTimeout(() => {
-                if (status.textContent === message) {
-                    status.style.display = 'none';
-                }
-            }, 5000);
-        }
-        
-        // Очистка всего
-        function clearAll() {
-            document.getElementById('blobUrl').value = '';
-            document.getElementById('videoPlayer').src = '';
-            document.getElementById('videoPlayer').style.display = 'none';
-            document.getElementById('status').style.display = 'none';
-            currentBlobUrl = '';
-            showStatus('✅ Очищено', 'success');
-        }
-        
-        // Получить размер blob (приблизительно)
-        function getBlobSize(blobUrl) {
-            // Это приблизительная оценка
-            try {
-                const match = blobUrl.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
-                if (match) return 1024 * 1024 * 5; // Примерно 5MB
-            } catch (e) {}
-            return 0;
-        }
-        
-        // Форматирование размера
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        // Горячие клавиши
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'Enter') {
-                e.preventDefault();
-                playVideo();
+
+        // Переворот карточки
+        function flipCard(cardElement) {
+            // Проверки: можно ли переворачивать, не перевернута ли уже, не собрана ли
+            if (!canFlip || cardElement.classList.contains('flipped') || cardElement.classList.contains('matched')) {
+                return;
             }
-        });
-        
-        // Авто-вставка из буфера
-        document.getElementById('blobUrl').addEventListener('click', async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text.startsWith('blob:')) {
-                    document.getElementById('blobUrl').value = text;
+
+            // Переворачиваем
+            cardElement.classList.add('flipped');
+            flippedCards.push(cardElement);
+
+            // Показываем сообщение о том, что перевернули
+            const cardType = cardElement.dataset.type === 'word' ? 'Слово' : 'Определение';
+            messageElement.textContent = `Игрок ${currentPlayer} открыл: ${cardType}`;
+            messageElement.className = 'message';
+
+            // Если перевернули две карточки
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                setTimeout(checkForMatch, 800);
+            }
+        }
+
+        // Проверка на совпадение
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.dataset.pairId === card2.dataset.pairId;
+
+            if (isMatch) {
+                // Совпали
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs.push(card1.dataset.pairId);
+
+                // Начисление очков
+                scores[currentPlayer]++;
+                updateScores();
+
+                // Сообщение об успехе
+                messageElement.textContent = `Игрок ${currentPlayer} нашёл пару! +1 очко. Ещё ход!`;
+                messageElement.classList.add('match-message');
+
+                // Очистка перевернутых карточек
+                flippedCards = [];
+
+                // Проверка на конец игры
+                if (matchedPairs.length === cardData.length) {
+                    endGame();
+                    return;
                 }
-            } catch (e) {}
-        });
-        
-        // Инициализация
-        init();
+
+                // Даём дополнительный ход тому же игроку
+                canFlip = true;
+                // Индикатор хода не меняем
+            } else {
+                // Не совпали
+                messageElement.textContent = `Не совпало. Ход переходит к Игроку ${currentPlayer === 1 ? 2 : 1}.`;
+                messageElement.className = 'message';
+
+                // Переворачиваем обратно с задержкой
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+
+                    // Меняем игрока
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    updateTurnIndicator();
+                    canFlip = true;
+                }, 800);
+            }
+        }
+
+        // Конец игры
+        function endGame() {
+            canFlip = false;
+            let winnerText;
+            if (scores[1] > scores[2]) {
+                winnerText = "🎉 Игрок 1 победил!";
+            } else if (scores[2] > scores[1]) {
+                winnerText = "🎉 Игрок 2 победил!";
+            } else {
+                winnerText = "🤝 Ничья!";
+            }
+
+            messageElement.innerHTML = `<strong>Игра окончена! ${winnerText}</strong><br>Слова изучены, мозг прокачан!`;
+            messageElement.className = 'message';
+        }
+
+        // Обновление индикатора хода
+        function updateTurnIndicator() {
+            turnIndicator.textContent = `Сейчас ходит: Игрок ${currentPlayer}`;
+            turnIndicator.className = `player-turn player${currentPlayer}`;
+        }
+
+        // Обновление счёта
+        function updateScores() {
+            score1Element.textContent = scores[1];
+            score2Element.textContent = scores[2];
+        }
+
+        // Перезапуск игры
+        function restartGame() {
+            initGame();
+        }
+
+        // Запуск игры при загрузке
+        window.onload = initGame;
     </script>
 </body>
 </html>
