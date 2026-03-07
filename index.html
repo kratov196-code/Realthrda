@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поздравление для Ульяны</title>
+    <title>С 8 Марта, Ульяна! 💐</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@700&family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,385 +14,613 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Playfair Display', serif;
-            background: linear-gradient(135deg, #f9e3e3 0%, #f5d0e6 50%, #e3f2fd 100%);
-            color: #5a3d5c;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(145deg, #f8e8e8 0%, #f8d7e8 40%, #ddebf7 100%);
+            color: #2d1b33;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            margin-top: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: #d81b60;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            animation: pulse 2s infinite;
-        }
-        
-        .name {
-            color: #8e24aa;
-            font-size: 4rem;
-            text-shadow: 3px 3px 0px rgba(142, 36, 170, 0.2);
-            display: inline-block;
-            transform: rotate(-5deg);
-            margin: 0 10px;
-        }
-        
-        .subtitle {
-            font-family: 'Marck Script', cursive;
-            font-size: 1.8rem;
-            color: #7b1fa2;
-            margin-top: 10px;
-        }
-        
-        .content {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            padding: 0 10px;
-        }
-        
-        .wish-list {
-            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            border-left: 5px solid #d81b60;
-        }
-        
-        .wish-list h3 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            color: #d81b60;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .wish-list ul {
-            list-style-type: none;
-            padding-left: 10px;
-        }
-        
-        .wish-list li {
-            padding: 8px 0;
-            font-size: 1.1rem;
-            position: relative;
-            padding-left: 35px;
-        }
-        
-        .wish-list li i {
-            color: #d81b60;
-            position: absolute;
-            left: 0;
-            top: 10px;
-        }
-        
-        .flowers {
-            display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+            align-items: center;
+            padding: 16px;
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        .flower {
-            font-size: 2.5rem;
-            animation: float 3s ease-in-out infinite;
-            animation-delay: calc(var(--i) * 0.5s);
-        }
-        
-        .signature {
-            text-align: right;
-            font-family: 'Marck Script', cursive;
-            font-size: 1.8rem;
-            color: #7b1fa2;
-            margin-top: 40px;
-            padding-right: 30px;
-        }
-        
-        .hearts {
-            position: absolute;
+
+        /* Анимированный фон из цветов */
+        .floating-bg {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
             z-index: 0;
+            opacity: 0.3;
         }
-        
-        .heart {
+
+        .floating-bg i {
             position: absolute;
-            font-size: 1.2rem;
-            color: #ff4081;
-            opacity: 0;
-            animation: fall 10s linear infinite;
+            color: #d98cb0;
+            font-size: 2rem;
+            animation: levitate 20s infinite linear;
+            user-select: none;
         }
-        
-        .balloons {
+
+        @keyframes levitate {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Основной контейнер - стал изящнее */
+        .greeting-card {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 251, 250, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 48px 48px 40px 40px;
+            box-shadow: 0 30px 60px rgba(122, 40, 80, 0.25), 0 15px 30px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8);
+            padding: 50px 45px;
+            position: relative;
+            z-index: 10;
+            border: 2px solid rgba(255, 215, 235, 0.5);
+            transition: all 0.3s;
+        }
+
+        /* Декоративные уголки */
+        .corner-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 4px solid #ff9eb5;
+            filter: drop-shadow(0 4px 6px rgba(210, 60, 120, 0.2));
+            opacity: 0.6;
+            border-radius: 30% 0 0 0;
+        }
+
+        .corner-1 {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-2 {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Шапка с именем и заголовком */
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pre-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #b95b9e;
+            letter-spacing: 1px;
+            margin-bottom: -10px;
+            transform: rotate(-2deg);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 4.2rem;
+            background: linear-gradient(135deg, #ac3b76, #6a1e5c, #315f9b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            text-shadow: 4px 4px 10px rgba(180, 70, 120, 0.2);
+            margin: 5px 0 10px;
+        }
+
+        .highlight-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            background: linear-gradient(45deg, #c4458c, #832b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            transform: scale(1.1);
+            padding: 0 10px;
+        }
+
+        .subhead {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #6b3e5a;
+            background: rgba(255, 225, 240, 0.7);
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+            margin-top: 10px;
+            border: 1px solid #ffbed3;
+        }
+
+        /* Основной текст поздравления */
+        .message {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #352230;
+            background: rgba(255, 240, 245, 0.5);
+            padding: 30px;
+            border-radius: 60px 20px 60px 20px;
+            margin: 25px 0;
+            border-left: 8px solid #fc8eb3;
+            box-shadow: inset 0 0 20px #ffeef4;
+        }
+
+        .message p {
+            margin-bottom: 18px;
+        }
+
+        .message p:first-child:first-letter {
+            font-size: 2.5rem;
+            font-family: 'Great Vibes', cursive;
+            color: #be4282;
+            padding-right: 5px;
+            float: left;
+        }
+
+        /* Интерактивный блок с пожеланиями (категории) */
+        .wishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 45px 0 30px;
+        }
+
+        .wish-item {
+            background: white;
+            border-radius: 35px 15px 35px 15px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 15px 25px rgba(160, 80, 120, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid rgba(255, 200, 220, 0.7);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wish-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 35px rgba(190, 70, 120, 0.25);
+            border-color: #faaac7;
+        }
+
+        .wish-item i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ec729c, #b23e74);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .wish-item h4 {
+            font-size: 1.6rem;
+            font-family: 'Dancing Script', cursive;
+            color: #a53860;
+            margin-bottom: 10px;
+        }
+
+        .wish-item p {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #5a3d53;
+            opacity: 0.9;
+        }
+
+        .wish-hover-message {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fb6b9e;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .wish-item:hover .wish-hover-message {
+            transform: translateY(0);
+        }
+
+        /* Секция подарка (Telegram) */
+        .gift-section {
+            background: linear-gradient(120deg, #f6d5e7, #ffdfc4);
+            border-radius: 50px 20px 50px 20px;
+            padding: 30px 30px 25px;
+            margin: 40px 0 20px;
+            border: 2px dashed #d9508a;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 0 5px rgba(255, 160, 200, 0.2);
+            animation: glow 2.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 0 5px rgba(255, 160, 200, 0.3); }
+            100% { box-shadow: 0 0 0 10px rgba(236, 110, 180, 0.5); }
+        }
+
+        .gift-section i {
+            font-size: 4rem;
+            color: #2481cc;
+            filter: drop-shadow(2px 4px 6px #1d5f9e);
+            margin-bottom: 10px;
+        }
+
+        .gift-section h2 {
+            font-size: 2.3rem;
+            font-family: 'Great Vibes', cursive;
+            color: #af2f6b;
+            margin: 5px 0;
+        }
+
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            background: #27a6e5;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 15px 0 10px;
+            border: 3px solid white;
+            box-shadow: 0 5px 0 #0e5e8a;
+            transition: 0.2s;
+        }
+
+        .telegram-link i {
+            font-size: 2rem;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .telegram-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #0e5e8a;
+        }
+
+        .gift-note {
+            font-size: 1.2rem;
+            background: rgba(255,255,240,0.6);
+            padding: 12px;
+            border-radius: 40px;
+            color: #8f3d66;
+        }
+
+        /* Букет цветов и анимация */
+        .flower-bouquet {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
             gap: 30px;
+            font-size: 3.2rem;
+            margin: 35px 0 20px;
+            filter: drop-shadow(0 5px 8px #f1b6c9);
+            flex-wrap: wrap;
         }
-        
-        .balloon {
-            width: 60px;
-            height: 70px;
-            border-radius: 50%;
-            position: relative;
-            animation: bounce 2s ease-in-out infinite;
-            animation-delay: calc(var(--i) * 0.3s);
+
+        .flower-bouquet span {
+            display: inline-block;
+            animation: swing 3s infinite ease-in-out;
+            transform-origin: bottom center;
         }
-        
-        .balloon:after {
-            content: '';
+
+        .flower-bouquet span:nth-child(odd) { animation-delay: 0.3s; }
+        .flower-bouquet span:nth-child(even) { animation-delay: 0.8s; }
+
+        @keyframes swing {
+            0%,100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-8deg); }
+        }
+
+        /* Подпись с именами */
+        .signature-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 45px;
+        }
+
+        .sender {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.3rem;
+            color: #b24572;
+            line-height: 1.2;
+            border-bottom: 3px solid #ffb8d2;
+            padding-bottom: 5px;
+        }
+
+        .date {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #79586d;
+        }
+
+        /* Падающие сердечки (интерактив) */
+        #hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .heart-float {
             position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 15px;
-            background-color: #aaa;
+            font-size: 1.8rem;
+            opacity: 0;
+            animation: floatUp 6s ease-out forwards;
+            filter: drop-shadow(0 0 5px hotpink);
+            color: #e8436e;
         }
-        
-        .balloon1 { background-color: #ff4081; }
-        .balloon2 { background-color: #7b1fa2; }
-        .balloon3 { background-color: #03a9f4; }
-        .balloon4 { background-color: #4caf50; }
-        .balloon5 { background-color: #ff9800; }
-        
+
+        @keyframes floatUp {
+            0% { opacity: 0.8; transform: translateY(0) scale(0.5); }
+            100% { opacity: 0; transform: translateY(-120vh) scale(1.5); }
+        }
+
+        /* Кнопка-сюрприз */
+        .surprise-btn {
+            background: none;
+            border: 2px solid #ff8db3;
+            color: #b84b7a;
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            border-radius: 60px;
+            cursor: pointer;
+            margin: 20px 0 5px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        .surprise-btn:hover {
+            background: #ff98bb;
+            color: white;
+            border-color: #ff4081;
+            box-shadow: 0 0 25px #fba0c3;
+        }
+
         footer {
-            margin-top: 30px;
             text-align: center;
-            font-size: 0.9rem;
-            color: #7b1fa2;
-            opacity: 0.8;
+            font-size: 0.95rem;
+            color: #895e7c;
+            margin-top: 30px;
         }
-        
-        /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes fall {
-            0% {
-                top: -10%;
-                opacity: 1;
+
+        /* Адаптация под мобилки */
+        @media (max-width: 600px) {
+            .greeting-card {
+                padding: 30px 20px;
+                border-radius: 30px;
             }
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .container {
-                padding: 25px;
-            }
-            
-            h1 {
-                font-size: 2.8rem;
-            }
-            
-            .name {
-                font-size: 3.2rem;
-            }
-            
-            .subtitle {
-                font-size: 1.5rem;
-            }
-            
-            .content {
-                font-size: 1.1rem;
-            }
-            
-            .wish-list {
-                padding: 20px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .name {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.3rem;
-            }
-            
-            .wish-list h3 {
-                font-size: 1.8rem;
-            }
-            
-            .flower {
-                font-size: 2rem;
-            }
+            h1 { font-size: 3rem; }
+            .highlight-name { font-size: 3.5rem; }
+            .pre-title { font-size: 1.7rem; }
+            .wishes-grid { grid-template-columns: 1fr; }
+            .flower-bouquet { gap: 12px; font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Дорогая <span class="name">Ульяна</span>!</h1>
-            <p class="subtitle">Прими самые тёплые поздравления!</p>
-        </div>
-        
-        <div class="content">
-            <p>От всей души хочу поздравить тебя и пожелать всего самого наилучшего! Пусть каждый твой день будет наполнен радостью, улыбками близких и светом счастья.</p>
-            
-            <p>Желаю, чтобы все твои мечты сбывались, планы осуществлялись, а цели достигались с лёгкостью. Пусть здоровье будет крепким, настроение всегда прекрасным, а в сердце живёт любовь и гармония.</p>
-            
-            <div class="wish-list">
-                <h3>Мои пожелания для тебя:</h3>
-                <ul>
-                    <li><i class="fas fa-heart"></i> Крепкого здоровья и неиссякаемой энергии</li>
-                    <li><i class="fas fa-star"></i> Ярких впечатлений и незабываемых моментов</li>
-                    <li><i class="fas fa-smile"></i> Постоянного повода для улыбок и радости</li>
-                    <li><i class="fas fa-gem"></i> Исполнения самых заветных желаний</li>
-                    <li><i class="fas fa-sun"></i> Тепла в душе и солнечного настроения</li>
-                    <li><i class="fas fa-handshake"></i> Верных друзей и понимающих близких</li>
-                    <li><i class="fas fa-rocket"></i> Успехов во всех начинаниях и проектах</li>
-                </ul>
+    <!-- Фоновые цветы (декорация) -->
+    <div class="floating-bg" id="floating-bg"></div>
+
+    <!-- Контейнер для всплывающих сердечек -->
+    <div id="hearts-container"></div>
+
+    <main class="greeting-card">
+        <!-- изысканные уголки -->
+        <div class="corner-decoration corner-1"></div>
+        <div class="corner-decoration corner-2"></div>
+
+        <div class="hero">
+            <div class="pre-title">С праздником весны,</div>
+            <h1>Дорогая <span class="highlight-name">Ульяна</span>!</h1>
+            <div class="subhead">
+                <i class="fas fa-sparkles" style="color:#f598b2;"></i> 8 Марта <i class="fas fa-sparkles" style="color:#f598b2;"></i>
             </div>
-            
-            <p>Пусть жизнь дарит тебе только приятные сюрпризы, а каждый новый день приносит что-то прекрасное. Оставайся такой же замечательной, доброй и искренней!</p>
-            
-            <p>С наилучшими пожеланиями и самыми тёплыми чувствами!</p>
         </div>
-        
-        <div class="flowers">
-            <div class="flower" style="--i: 0">🌹</div>
-            <div class="flower" style="--i: 1">🌷</div>
-            <div class="flower" style="--i: 2">🌸</div>
-            <div class="flower" style="--i: 3">💐</div>
-            <div class="flower" style="--i: 4">🌼</div>
+
+        <div class="message">
+            <p>💐 Пусть этот день утопает в цветах, улыбках и комплиментах!  Пусть сбываются мечты, радуют близкие, а каждый новый день приносит вдохновение.</p>
+            <p>⭐ Пусть здоровье будет крепким, а глаза сияют счастьем. Оставайся такой жe доброй!</p>
         </div>
-        
-        <div class="balloons">
-            <div class="balloon balloon1" style="--i: 0"></div>
-            <div class="balloon balloon2" style="--i: 1"></div>
-            <div class="balloon balloon3" style="--i: 2"></div>
-            <div class="balloon balloon4" style="--i: 3"></div>
-            <div class="balloon balloon5" style="--i: 4"></div>
+
+        <!-- Интерактивные карточки пожеланий (с секретом при наведении) -->
+        <div class="wishes-grid">
+            <div class="wish-item">
+                <i class="fa-solid fa-heart-circle-check"></i>
+                <h4>Любовь</h4>
+                <p>Океан тепла</p>
+                <span class="wish-hover-message">❤️ бесконечно ❤️</span>
+            </div>
+            <div class="wish-item">
+                <i class="fa-solid fa-star"></i>
+                <h4>Успех</h4>
+                <p>Яркие победы,</p>
+                <span class="wish-hover-message">🌟 ты всего достойна 🌟</span>
+            </div>
+            <div class="wish-item">
+                <i class="fa-solid fa-leaf"></i>
+                <h4>Гармония</h4>
+                <p>Баланс, уют и спокойствие</p>
+                <span class="wish-hover-message">🌸 душевный рай 🌸</span>
+            </div>
+            <div class="wish-item">
+                <i class="fa-solid fa-champagne-glasses"></i>
+                <h4>Праздник</h4>
+                <p>Море впечатлений, радости, смеха</p>
+                <span class="wish-hover-message">🥂 каждый день 🥂</span>
+            </div>
         </div>
-        
-        <div class="signature">С любовью и теплом!</div>
-        
-        <div class="hearts" id="hearts-container"></div>
-    </div>
-    
-    <footer>
-        Создано с ❤️ специально для Ульяны
-    </footer>
+
+        <!-- БЛОК ТЕЛЕГРАМА (как и просили: "загляни в тг там подарок будет") -->
+        <div class="gift-section">
+            <i class="fab fa-telegram-plane"></i>
+            <h2>Секретный подарок ждёт ✨</h2>
+            <a href="https://t.me/your_secret_gift_bot?start=ulyana_march8" class="telegram-link" target="_blank">
+                <i class="fab fa-telegram"></i> Загляни в Telegram
+            </a>
+            <div class="gift-note">
+                🎁 Там кое-что особенное только для тебя! (нажми на ссылку)
+            </div>
+            <small style="display:block; margin-top:8px;">🔐  подарок</small>
+        </div>
+
+        <!-- Цветочная композиция с анимацией -->
+        <div class="flower-bouquet">
+            <span>🌷</span>
+            <span>🌹</span>
+            <span>🌸</span>
+            <span>🌺</span>
+            <span>🌼</span>
+            <span>💐</span>
+        </div>
+
+        <!-- Кнопка, которая запускает фейерверк сердечек -->
+        <button class="surprise-btn" id="surpriseBtn"><i class="fa-regular fa-heart"></i> Нажми для сюрприза <i class="fa-regular fa-heart"></i></button>
+
+        <!-- Подпись и дата -->
+        <div class="signature-block">
+            <div class="sender">,<br>  CryptoCat </div>
+            <div class="date">8 марта 2025</div>
+        </div>
+
+        <footer>
+            Создано с <i class="fas fa-heart" style="color:#e63973;"></i> специально для Ульяны
+        </footer>
+    </main>
 
     <script>
-        // Создаем летающие сердечки
-        function createHearts() {
-            const heartsContainer = document.getElementById('hearts-container');
-            const heartCount = 25;
-            
-            for (let i = 0; i < heartCount; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '❤️';
-                
-                // Случайная позиция и анимация
-                const leftPos = Math.random() * 100;
-                const animationDuration = 8 + Math.random() * 7;
-                const fontSize = 0.8 + Math.random() * 1.2;
-                const delay = Math.random() * 10;
-                
-                heart.style.left = `${leftPos}%`;
-                heart.style.fontSize = `${fontSize}rem`;
-                heart.style.animationDuration = `${animationDuration}s`;
-                heart.style.animationDelay = `${delay}s`;
-                
-                heartsContainer.appendChild(heart);
-            }
-        }
-        
-        // Добавляем интерактивность - сердечки при клике
-        document.addEventListener('click', function(e) {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = `${e.clientX}px`;
-            heart.style.top = `${e.clientY}px`;
-            heart.style.fontSize = `${1 + Math.random() * 1.5}rem`;
-            heart.style.animationDuration = `${4 + Math.random() * 3}s`;
-            heart.style.animationDelay = '0s';
-            
-            document.body.appendChild(heart);
-            
-            // Удаляем сердечко после анимации
-            setTimeout(() => {
-                heart.remove();
-            }, 4000);
-        });
-        
-        // Инициализируем сердечки при загрузке страницы
-        window.addEventListener('DOMContentLoaded', createHearts);
-        
-        // Добавляем эффект печатания для заголовка
-        document.addEventListener('DOMContentLoaded', function() {
-            const nameElement = document.querySelector('.name');
-            const originalName = nameElement.textContent;
-            nameElement.textContent = '';
-            
-            let i = 0;
-            function typeWriter() {
-                if (i < originalName.length) {
-                    nameElement.textContent += originalName.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 150);
+        (function() {
+            // 1. Создаем летающие фоновые цветочки (вместо сердечек в фоне — более нежно)
+            function createFloatingFlowers() {
+                const bg = document.getElementById('floating-bg');
+                const flowers = ['🌸', '🌼', '🌷', '🌹', '🌺', '🪷', '🌿', '✨'];
+                for (let i = 0; i < 25; i++) {
+                    const flower = document.createElement('i');
+                    flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                    flower.style.left = Math.random() * 100 + '%';
+                    flower.style.animationDuration = (12 + Math.random() * 15) + 's';
+                    flower.style.fontSize = (1.3 + Math.random() * 2.5) + 'rem';
+                    flower.style.animationDelay = (Math.random() * -20) + 's';
+                    flower.style.opacity = 0.3 + Math.random() * 0.3;
+                    bg.appendChild(flower);
                 }
             }
-            
-            // Запускаем эффект печатания с небольшой задержкой
-            setTimeout(typeWriter, 500);
-        });
+            createFloatingFlowers();
+
+            // 2. Функция для создания сердечек (по клику и из кнопки)
+            function createHeartBurst(x, y, count = 15) {
+                const container = document.getElementById('hearts-container');
+                for (let i = 0; i < count; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-float';
+                    heart.innerHTML = ['❤️', '🧡', '💖', '💗', '💓', '🌸', '🌷'][Math.floor(Math.random() * 7)];
+                    heart.style.left = (x + (Math.random() - 0.5) * 200) + 'px';
+                    heart.style.top = (y + (Math.random() - 0.5) * 150) + 'px';
+                    heart.style.fontSize = (1.0 + Math.random() * 2.2) + 'rem';
+                    heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+                    heart.style.animationDelay = Math.random() * 0.2 + 's';
+                    container.appendChild(heart);
+
+                    // удалить после анимации
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 7000);
+                }
+            }
+
+            // Слушаем клик на документе — чтобы из любого места сыпались сердечки
+            document.addEventListener('click', function(e) {
+                createHeartBurst(e.clientX, e.clientY, 10);
+            });
+
+            // Кнопка-сюрприз тоже делает фейерверк и дополнительный эффект
+            const surpriseBtn = document.getElementById('surpriseBtn');
+            surpriseBtn.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                createHeartBurst(centerX, centerY, 35); // много сердечек
+                // Показываем alert в стиле подарка (можно заменить на что-то более элегантное)
+                const giftMessage = document.createElement('div');
+                giftMessage.textContent = '🎉 Сюрприз! ✨ Лови ещё больше валентинок! ❤️';
+                giftMessage.style.position = 'fixed';
+                giftMessage.style.top = '30%';
+                giftMessage.style.left = '50%';
+                giftMessage.style.transform = 'translate(-50%, -50%)';
+                giftMessage.style.background = '#ffecf0';
+                giftMessage.style.padding = '20px 40px';
+                giftMessage.style.borderRadius = '60px';
+                giftMessage.style.boxShadow = '0 0 50px #f687b3';
+                giftMessage.style.zIndex = '10000';
+                giftMessage.style.fontSize = '1.7rem';
+                giftMessage.style.fontFamily = 'Dancing Script, cursive';
+                giftMessage.style.color = '#ab3765';
+                giftMessage.style.border = '4px solid white';
+                giftMessage.style.animation = 'glow 1s infinite alternate';
+                document.body.appendChild(giftMessage);
+                setTimeout(() => giftMessage.remove(), 2500);
+            });
+
+            // 3. Красивый эффект пишущей машинки для имени (но можно оставить просто появление)
+            const nameSpan = document.querySelector('.highlight-name');
+            const originalName = nameSpan.textContent;
+            // если хочешь оставить эффект — можно, но оставим как есть, просто заменим и добавим обновление
+            // Сделаем проще: небольшая вспышка при загрузке
+            nameSpan.style.transition = 'text-shadow 0.8s';
+            nameSpan.style.textShadow = '0 0 15px hotpink';
+            setTimeout(() => nameSpan.style.textShadow = 'none', 800);
+
+            // 4. Добавим сообщение о подарке в телеграме при клике на ссылку ( дополнительное внимание)
+            const tgLink = document.querySelector('.telegram-link');
+            tgLink.addEventListener('click', (e) => {
+                // Можно оставить как есть, но показать уведомление
+                setTimeout(() => {
+                    alert('💌 Загляни в Telegram — там для тебя подарок! (это демо, ссылка ведёт на пример)');
+                }, 100);
+                // Не блокируем переход
+            });
+
+            // 5. добавим весеннего настроения: при загрузке страницы всплывают сердечки по всему экрану
+            window.addEventListener('load', () => {
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(() => {
+                        const randX = Math.random() * window.innerWidth;
+                        const randY = Math.random() * window.innerHeight * 0.7;
+                        createHeartBurst(randX, randY, 5);
+                    }, i * 200);
+                }
+            });
+        })();
     </script>
+    <!-- Обратите внимание: ссылка Telegram демонстрационная, в реальности нужно заменить на вашу -->
+    <!-- И маленький читерский намёк, что внутри подарок — все по условию -->
 </body>
-    </html>
+</html>
