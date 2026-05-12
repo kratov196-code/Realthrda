@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CryptoCat Browser — стартовая страница</title>
+    <title>CryptoCat Browser — встроенный браузер</title>
     <style>
         * {
             margin: 0;
@@ -24,19 +24,23 @@
         .browser {
             width: 1100px;
             max-width: 95%;
+            height: 750px;
             background: #101218;
             border-radius: 24px;
             box-shadow: 0 30px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .window-bar {
             background: #1b1e2a;
-            padding: 14px 18px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
             border-bottom: 1px solid #2a2e3e;
+            flex-shrink: 0;
         }
 
         .window-dots {
@@ -57,12 +61,12 @@
             flex: 1;
             background: #0c0e16;
             border-radius: 40px;
-            padding: 8px 16px;
+            padding: 6px 16px;
             display: flex;
             align-items: center;
             gap: 8px;
             border: 1px solid #2a2e3e;
-            font-size: 14px;
+            font-size: 13px;
             color: #e2e4f0;
         }
 
@@ -70,18 +74,57 @@
             font-size: 18px;
         }
 
-        .url-text {
-            font-family: 'Monaco', 'Menlo', monospace;
+        .url-input {
+            flex: 1;
+            background: transparent;
+            border: none;
             color: #bdc3e6;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .go-btn {
+            background: #2a2f42;
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .go-btn:hover {
+            background: #ffb347;
+            color: #0f111a;
         }
 
         .secure-badge {
-            margin-left: auto;
-            font-size: 12px;
+            font-size: 11px;
             background: #232736;
             padding: 4px 8px;
             border-radius: 20px;
             color: #7effb0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: #2a2f42;
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: #ffb347;
         }
 
         .tabs-bar {
@@ -90,14 +133,15 @@
             padding-left: 16px;
             gap: 2px;
             border-bottom: 1px solid #252a38;
+            flex-shrink: 0;
         }
 
         .tab {
-            padding: 12px 20px;
-            font-size: 13px;
+            padding: 8px 16px;
+            font-size: 12px;
             background: #101218;
             color: #9da1bc;
-            border-radius: 12px 12px 0 0;
+            border-radius: 10px 10px 0 0;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -111,115 +155,27 @@
             border-bottom: 2px solid #ffb347;
         }
 
-        .browser-content {
-            padding: 24px 28px;
-            min-height: 500px;
-            background: #0c0f18;
-            color: #eef2ff;
+        .iframe-container {
+            flex: 1;
+            background: white;
+            position: relative;
         }
 
-        .welcome-section {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .big-cat {
-            font-size: 72px;
-            margin-bottom: 16px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #FFD89B, #FFB347);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 8px;
-        }
-
-        .tagline {
-            color: #8f94b0;
-            margin-bottom: 40px;
-        }
-
-        .search-grid {
-            display: flex;
-            justify-content: center;
-            gap: 28px;
-            flex-wrap: wrap;
-            margin: 40px 0;
-        }
-
-        .cat-card {
-            background: #161b27;
-            padding: 20px 28px;
-            border-radius: 28px;
-            width: 170px;
-            text-align: center;
-            transition: 0.2s;
-            border: 1px solid #262d3d;
-            cursor: pointer;
-        }
-
-        .cat-card:hover {
-            transform: translateY(-5px);
-            background: #1e2537;
-            border-color: #ffb347;
-        }
-
-        .cat-emoji {
-            font-size: 44px;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        .cat-card h4 {
-            font-size: 16px;
-            margin-bottom: 6px;
-        }
-
-        .cat-card p {
-            font-size: 12px;
-            color: #7f85a6;
-        }
-
-        .link-button {
-            background: #2a2f42;
+        iframe {
+            width: 100%;
+            height: 100%;
             border: none;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.1s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .link-button:hover {
-            background: #ffb347;
-            color: #0f111a;
-        }
-
-        .footer-note {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #4f5577;
-            border-top: 1px solid #202433;
-            padding-top: 24px;
-            display: flex;
-            justify-content: space-between;
         }
 
         .toolbar {
-            padding: 8px 20px;
+            padding: 6px 16px;
             background: #11141f;
             display: flex;
-            gap: 20px;
+            gap: 16px;
             border-top: 1px solid #202434;
-            font-size: 13px;
+            font-size: 11px;
             color: #b1b6d4;
+            flex-shrink: 0;
         }
 
         .tool-item {
@@ -229,158 +185,210 @@
             cursor: pointer;
         }
 
-        .external-link {
-            color: #ffb974;
-            text-decoration: none;
-            font-weight: 500;
+        .tool-item:hover {
+            color: #ffb347;
+        }
+
+        .home-btn {
+            background: #ffb347;
+            color: #0f111a;
+            padding: 2px 8px;
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
 <div class="browser">
+    <!-- Шапка -->
     <div class="window-bar">
         <div class="window-dots">
             <div class="dot red"></div>
             <div class="dot yellow"></div>
             <div class="dot green"></div>
         </div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="goBack()" title="Назад">◀</button>
+            <button class="nav-btn" onclick="goForward()" title="Вперед">▶</button>
+            <button class="nav-btn" onclick="reloadPage()" title="Обновить">⟳</button>
+        </div>
         <div class="address-bar">
             <span class="cat-icon">🐈‍⬛</span>
-            <span class="url-text" id="urlDisplay">cryptocat://start</span>
+            <input type="text" class="url-input" id="urlInput" value="https://cryptocat.ru" placeholder="Введите URL или выберите сайт ниже...">
+            <button class="go-btn" onclick="navigateToUrl()">Перейти</button>
             <span class="secure-badge">🔒 Кот-защитник</span>
         </div>
     </div>
 
+    <!-- Вкладки -->
     <div class="tabs-bar">
-        <div class="tab active" data-tab="home">🐱 Мур-Лента</div>
-        <div class="tab" data-tab="wiki">📁 Котознавка</div>
-        <div class="tab" data-tab="settings">⚙️ Хвост-настройки</div>
+        <div class="tab active" onclick="switchTab('home')">🏠 Главная</div>
+        <div class="tab" onclick="switchTab('browser')">🌐 Браузер</div>
     </div>
 
-    <div class="browser-content" id="mainContent"></div>
+    <!-- Контент: либо стартовая страница, либо iframe -->
+    <div id="homePage" style="flex:1; overflow-y: auto; padding: 24px; background: #0c0f18; color: #eef2ff; display: flex;">
+        <div style="width:100%; max-width: 800px; margin: 0 auto; text-align: center;">
+            <div style="font-size: 72px; margin-bottom: 16px;">😺🌀</div>
+            <h1 style="font-size: 28px; background: linear-gradient(135deg, #FFD89B, #FFB347); -webkit-background-clip: text; background-clip: text; color: transparent;">CryptoCat Browser</h1>
+            <p style="color: #8f94b0; margin-bottom: 40px;">Кликни на любую кнопку — сайт откроется ВНУТРИ этого окна!</p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
+                <div onclick="openInBrowser('https://www.google.com')" style="background: #161b27; padding: 20px; border-radius: 24px; width: 150px; cursor: pointer; border: 1px solid #262d3d;">
+                    <div style="font-size: 44px;">🔎</div>
+                    <h4>Google</h4>
+                    <p style="font-size: 12px;">Поисковик</p>
+                </div>
+                <div onclick="openInBrowser('https://www.youtube.com')" style="background: #161b27; padding: 20px; border-radius: 24px; width: 150px; cursor: pointer; border: 1px solid #262d3d;">
+                    <div style="font-size: 44px;">📺</div>
+                    <h4>YouTube</h4>
+                    <p style="font-size: 12px;">Видео</p>
+                </div>
+                <div onclick="openInBrowser('https://www.reddit.com/r/cats/')" style="background: #161b27; padding: 20px; border-radius: 24px; width: 150px; cursor: pointer; border: 1px solid #262d3d;">
+                    <div style="font-size: 44px;">🐈</div>
+                    <h4>Reddit коты</h4>
+                    <p style="font-size: 12px;">Кошачий сабреддит</p>
+                </div>
+                <div onclick="openInBrowser('https://cataas.com/cat')" style="background: #161b27; padding: 20px; border-radius: 24px; width: 150px; cursor: pointer; border: 1px solid #262d3d;">
+                    <div style="font-size: 44px;">🐱</div>
+                    <h4>Случайный кот</h4>
+                    <p style="font-size: 12px;">Генератор котов</p>
+                </div>
+            </div>
 
+            <div style="background: #131824; border-radius: 24px; padding: 20px;">
+                <p><strong>✏️ Или введи любой URL в адресную строку сверху</strong></p>
+                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap;">
+                    <button onclick="openInBrowser('https://ru.wikipedia.org')" style="background:#2a2f42; border:none; color:white; padding:8px 16px; border-radius:20px; cursor:pointer;">📖 Википедия</button>
+                    <button onclick="openInBrowser('https://github.com')" style="background:#2a2f42; border:none; color:white; padding:8px 16px; border-radius:20px; cursor:pointer;">🐙 GitHub</button>
+                    <button onclick="openInBrowser('https://www.instagram.com')" style="background:#2a2f42; border:none; color:white; padding:8px 16px; border-radius:20px; cursor:pointer;">📸 Instagram</button>
+                    <button onclick="openInBrowser('https://x.com')" style="background:#2a2f42; border:none; color:white; padding:8px 16px; border-radius:20px; cursor:pointer;">𝕏 Twitter</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; font-size: 12px; color: #4f5577;">
+                © CryptoCat — браузер внутри браузера 🐈
+            </div>
+        </div>
+    </div>
+
+    <div id="browserFrame" style="flex:1; display: none; flex-direction: column;">
+        <div class="iframe-container">
+            <iframe id="webFrame" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <!-- Нижняя панель -->
     <div class="toolbar">
-        <div class="tool-item" onclick="alert('🛡️ Анти-слежка: включена! Все ссылки открываются с защитой.')">🛡️ Анти-слежка</div>
-        <div class="tool-item" onclick="alert('⭐ Сохраните эту страницу в закладки — это ваш CryptoCat браузер')">⭐ Закладки</div>
-        <div class="tool-item" onclick="alert('🐱 История: сегодня вы открывали ссылки через CryptoCat')">📜 История</div>
+        <div class="tool-item" onclick="alert('🛡️ Защита включена! Этот iframe-браузер изолирован.')">🛡️ Анти-слежка</div>
+        <div class="tool-item" onclick="alert('⭐ Добавь эту страницу в закладки — твой личный CryptoCat')">⭐ Закладки</div>
+        <div class="tool-item home-btn" onclick="goHome()">🏠 Домой</div>
     </div>
 </div>
 
 <script>
-    // Функция для безопасного открытия ссылок в НОВОЙ вкладке
-    function openLink(url) {
-        if (url && url !== '#') {
-            window.open(url, '_blank');
-            document.getElementById('urlDisplay').innerText = url;
+    const homePage = document.getElementById('homePage');
+    const browserFrame = document.getElementById('browserFrame');
+    const iframe = document.getElementById('webFrame');
+    const urlInput = document.getElementById('urlInput');
+    
+    let historyStack = [];
+    let historyIndex = -1;
+
+    function openInBrowser(url) {
+        // Добавляем https если нет протокола
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        urlInput.value = url;
+        iframe.src = url;
+        
+        // Добавляем в историю
+        historyStack = historyStack.slice(0, historyIndex + 1);
+        historyStack.push(url);
+        historyIndex++;
+        
+        // Переключаемся в режим браузера
+        homePage.style.display = 'none';
+        browserFrame.style.display = 'flex';
+        
+        // Активируем вкладку браузера
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab')[1].classList.add('active');
+    }
+    
+    function navigateToUrl() {
+        let url = urlInput.value.trim();
+        if (!url) return;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        openInBrowser(url);
+    }
+    
+    function goBack() {
+        if (historyIndex > 0) {
+            historyIndex--;
+            iframe.src = historyStack[historyIndex];
+            urlInput.value = historyStack[historyIndex];
         }
     }
-
-    // ГЛАВНАЯ СТРАНИЦА (рабочие ссылки!)
-    function renderHome() {
-        document.getElementById('mainContent').innerHTML = `
-            <div class="welcome-section">
-                <div class="big-cat">😺🌀</div>
-                <h1>CryptoCat Browser</h1>
-                <div class="tagline">Твой безопасный браузер. Жми на кнопки — ссылки реально открываются!</div>
-                
-                <div class="search-grid">
-                    <div class="cat-card" onclick="openLink('https://www.google.com/search?q=самые+смешные+коты')">
-                        <span class="cat-emoji">🔎🐈</span>
-                        <h4>Мур-поиск</h4>
-                        <p>Найди котов в Google</p>
-                    </div>
-                    <div class="cat-card" onclick="openLink('https://www.youtube.com/results?search_query=cats+funny')">
-                        <span class="cat-emoji">📦🐾</span>
-                        <h4>Кото-YouTube</h4>
-                        <p>Видео с котами</p>
-                    </div>
-                    <div class="cat-card" onclick="openLink('https://purrfectplay.com')">
-                        <span class="cat-emoji">🎮🐱</span>
-                        <h4>Мяу-сити</h4>
-                        <p>Игры для котов</p>
-                    </div>
-                    <div class="cat-card" onclick="openLink('https://chat.openai.com')">
-                        <span class="cat-emoji">🧠✨</span>
-                        <h4>Котонейрон</h4>
-                        <p>AI помощник</p>
-                    </div>
-                </div>
-
-                <div style="background: #131824; border-radius: 24px; padding: 18px; margin: 20px 0;">
-                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;">
-                        <span style="font-size: 32px;">🌐</span>
-                        <span><strong>Популярные ссылки (работают!)</strong><br>Кликни — откроется в новой вкладке</span>
-                    </div>
-                    <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                        <button class="link-button" onclick="openLink('https://www.wikipedia.org')">📖 Википедия</button>
-                        <button class="link-button" onclick="openLink('https://www.reddit.com/r/cats/')">🐈 Reddit (котики)</button>
-                        <button class="link-button" onclick="openLink('https://cataas.com/cat')">🐱 Случайный кот</button>
-                        <button class="link-button" onclick="openLink('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">🎵 Кото-музыка</button>
-                    </div>
-                </div>
-
-                <div class="footer-note">
-                    <span>© CryptoCat — браузер с кошачьим характером</span>
-                    <span>🐈 v3.0 «Лапки вверх»</span>
-                </div>
-            </div>
-        `;
-        document.getElementById('urlDisplay').innerText = "cryptocat://start";
+    
+    function goForward() {
+        if (historyIndex < historyStack.length - 1) {
+            historyIndex++;
+            iframe.src = historyStack[historyIndex];
+            urlInput.value = historyStack[historyIndex];
+        }
     }
-
-    // Котознавка (тоже с ссылками)
-    function renderWiki() {
-        document.getElementById('mainContent').innerHTML = `
-            <div style="padding: 20px; text-align: center;">
-                <span style="font-size: 60px;">📘🐈</span>
-                <h2 style="margin: 20px 0;">Котознавка</h2>
-                <p style="color: #bcc0dd;">Интересные факты о котах + проверенные ссылки:</p>
-                <ul style="text-align: left; max-width: 400px; margin: 20px auto; background: #11151f; padding: 20px 30px; border-radius: 24px;">
-                    <li style="margin: 10px 0;">🐾 <a href="#" onclick="openLink('https://ru.wikipedia.org/wiki/Кошка'); return false;">Кошка на Википедии</a></li>
-                    <li style="margin: 10px 0;">😻 <a href="#" onclick="openLink('https://icatcare.org/'); return false;">Международный уход за кошками</a></li>
-                    <li style="margin: 10px 0;">📸 <a href="#" onclick="openLink('https://www.instagram.com/explore/tags/cats/'); return false;">#коты в Instagram</a></li>
-                    <li style="margin: 10px 0;">🎥 <a href="#" onclick="openLink('https://www.youtube.com/results?search_query=cat+documentary'); return false;">Документалки про котов</a></li>
-                </ul>
-                <button class="link-button" onclick="renderHome()">← Вернуться на главную</button>
-            </div>
-        `;
-        document.getElementById('urlDisplay').innerText = "cryptocat://wiki";
+    
+    function reloadPage() {
+        iframe.src = iframe.src;
     }
-
-    function renderSettings() {
-        document.getElementById('mainContent').innerHTML = `
-            <div style="padding: 40px; text-align: center;">
-                <span style="font-size: 60px;">⚙️🐈</span>
-                <h3>Хвост-настройки</h3>
-                <p style="margin: 20px;">Все ссылки открываются в новой вкладке — безопасно и удобно.</p>
-                <p>✨ Можешь добавить эту страницу в закладки, как личный браузер CryptoCat ✨</p>
-                <button class="link-button" onclick="openLink('https://github.com/')">🐙 GitHub (пример перехода)</button>
-                <button class="link-button" onclick="renderHome()" style="margin-left: 12px;">Домой</button>
-            </div>
-        `;
-        document.getElementById('urlDisplay').innerText = "cryptocat://settings";
+    
+    function goHome() {
+        homePage.style.display = 'flex';
+        browserFrame.style.display = 'none';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        urlInput.value = 'cryptocat://start';
     }
-
-    // Переключение вкладок
-    function setActiveTab(tabId) {
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
-        
-        if (tabId === 'home') renderHome();
-        else if (tabId === 'wiki') renderWiki();
-        else if (tabId === 'settings') renderSettings();
+    
+    function switchTab(tabName) {
+        if (tabName === 'home') {
+            goHome();
+        } else if (tabName === 'browser') {
+            if (iframe.src === 'about:blank' || iframe.src === '') {
+                openInBrowser('https://www.google.com');
+            } else {
+                homePage.style.display = 'none';
+                browserFrame.style.display = 'flex';
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            }
+        }
     }
-
-    // Обработчики вкладок
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.getAttribute('data-tab');
-            setActiveTab(tabId);
-        });
+    
+    // Обновляем адресную строку когда iframe загружается
+    iframe.addEventListener('load', function() {
+        try {
+            let iframeUrl = iframe.contentWindow.location.href;
+            if (iframeUrl && iframeUrl !== 'about:blank') {
+                urlInput.value = iframeUrl;
+            }
+        } catch(e) {
+            // CORS ограничения — игнорируем
+        }
     });
-
-    // Запускаем домашнюю страницу
-    renderHome();
+    
+    // Enter в адресной строке
+    urlInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            navigateToUrl();
+        }
+    });
+    
+    // Стартовая страница
+    goHome();
 </script>
 </body>
-</html>
+    </html>
