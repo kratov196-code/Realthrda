@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CryptoCat Browser</title>
+    <title>CryptoCat Browser — стартовая страница</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* Браузерное окно */
         .browser {
             width: 1100px;
             max-width: 95%;
@@ -29,11 +28,8 @@
             border-radius: 24px;
             box-shadow: 0 30px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
             overflow: hidden;
-            backdrop-filter: blur(0px);
-            transition: all 0.2s ease;
         }
 
-        /* Верхняя панель (управление окном) */
         .window-bar {
             background: #1b1e2a;
             padding: 14px 18px;
@@ -52,14 +48,11 @@
             width: 13px;
             height: 13px;
             border-radius: 50%;
-            transition: 0.1s;
         }
-
         .dot.red { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green { background: #27c93f; }
 
-        /* Адресная строка с котиком */
         .address-bar {
             flex: 1;
             background: #0c0e16;
@@ -75,12 +68,10 @@
 
         .cat-icon {
             font-size: 18px;
-            filter: drop-shadow(0 0 2px #ffb347);
         }
 
         .url-text {
             font-family: 'Monaco', 'Menlo', monospace;
-            letter-spacing: 0.3px;
             color: #bdc3e6;
         }
 
@@ -93,7 +84,6 @@
             color: #7effb0;
         }
 
-        /* Панель вкладок */
         .tabs-bar {
             display: flex;
             background: #151824;
@@ -113,7 +103,6 @@
             gap: 8px;
             cursor: pointer;
             transition: 0.1s;
-            border-right: 1px solid #232736;
         }
 
         .tab.active {
@@ -122,11 +111,6 @@
             border-bottom: 2px solid #ffb347;
         }
 
-        .tab span:first-child {
-            font-size: 16px;
-        }
-
-        /* Основной контент браузера */
         .browser-content {
             padding: 24px 28px;
             min-height: 500px;
@@ -134,17 +118,14 @@
             color: #eef2ff;
         }
 
-        /* Стили стартовой страницы (newtab) */
         .welcome-section {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
         .big-cat {
             font-size: 72px;
             margin-bottom: 16px;
-            display: inline-block;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
         }
 
         h1 {
@@ -159,8 +140,7 @@
 
         .tagline {
             color: #8f94b0;
-            margin-bottom: 48px;
-            font-size: 15px;
+            margin-bottom: 40px;
         }
 
         .search-grid {
@@ -204,6 +184,24 @@
             color: #7f85a6;
         }
 
+        .link-button {
+            background: #2a2f42;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.1s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .link-button:hover {
+            background: #ffb347;
+            color: #0f111a;
+        }
+
         .footer-note {
             margin-top: 50px;
             font-size: 12px;
@@ -214,23 +212,6 @@
             justify-content: space-between;
         }
 
-        button {
-            background: #2a2f42;
-            border: none;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-
-        button:hover {
-            background: #ffb347;
-            color: #0f111a;
-        }
-
-        /* Панель инструментов */
         .toolbar {
             padding: 8px 20px;
             background: #11141f;
@@ -248,24 +229,15 @@
             cursor: pointer;
         }
 
-        a {
+        .external-link {
             color: #ffb974;
             text-decoration: none;
-        }
-
-        @keyframes subtlePulse {
-            0% { text-shadow: 0 0 0px rgba(255,180,70,0);}
-            100% { text-shadow: 0 0 6px rgba(255,180,70,0.4);}
-        }
-
-        .cat-icon:hover {
-            animation: subtlePulse 0.4s infinite alternate;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 <div class="browser">
-    <!-- Заголовок окна -->
     <div class="window-bar">
         <div class="window-dots">
             <div class="dot red"></div>
@@ -274,139 +246,60 @@
         </div>
         <div class="address-bar">
             <span class="cat-icon">🐈‍⬛</span>
-            <span class="url-text">cryptocat://newtab</span>
+            <span class="url-text" id="urlDisplay">cryptocat://start</span>
             <span class="secure-badge">🔒 Кот-защитник</span>
         </div>
     </div>
 
-    <!-- Вкладки (имитация) -->
     <div class="tabs-bar">
-        <div class="tab active">
-            <span>🐱</span> <span>Мур-Лента</span>
-        </div>
-        <div class="tab">
-            <span>📁</span> <span>Котознавка</span>
-        </div>
-        <div class="tab">
-            <span>⚙️</span> <span>Хвост-настройки</span>
-        </div>
+        <div class="tab active" data-tab="home">🐱 Мур-Лента</div>
+        <div class="tab" data-tab="wiki">📁 Котознавка</div>
+        <div class="tab" data-tab="settings">⚙️ Хвост-настройки</div>
     </div>
 
-    <!-- Основной контент -->
-    <div class="browser-content" id="mainContent">
-        <div class="welcome-section">
-            <div class="big-cat">😺🌀</div>
-            <h1>CryptoCat Browser</h1>
-            <div class="tagline">Браузер с характером хитрого кота — безопасно, стильно, без лишней крипты.</div>
-            
-            <div class="search-grid">
-                <div class="cat-card" onclick="alert('🐟 Мур-поиск: здесь будут твои любимые сайты с котами')">
-                    <span class="cat-emoji">🔎🐈</span>
-                    <h4>Мур-поиск</h4>
-                    <p>Анонимные запросы</p>
-                </div>
-                <div class="cat-card" onclick="alert('📦 Когтеточка для файлов — хранилище лапок')">
-                    <span class="cat-emoji">📦🐾</span>
-                    <h4>Когтеточка</h4>
-                    <p>Облачные закладки</p>
-                </div>
-                <div class="cat-card" onclick="alert('🎮 Игровой клуб «Мяу-сити»')">
-                    <span class="cat-emoji">🎮🐱</span>
-                    <h4>Мяу-сити</h4>
-                    <p>Игры и развлечения</p>
-                </div>
-                <div class="cat-card" onclick="alert('🧠 ИИ-Котонейронка — советчик')">
-                    <span class="cat-emoji">🧠✨</span>
-                    <h4>Котонейрон</h4>
-                    <p>AI помощник</p>
-                </div>
-            </div>
+    <div class="browser-content" id="mainContent"></div>
 
-            <div style="background: #131824; border-radius: 24px; padding: 18px; margin: 20px 0;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 32px;">📰</span>
-                    <span><strong>Лента «Мурчащие новости»</strong><br>Топ сайтов, которые рекомендуют коты-серферы</span>
-                </div>
-                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                    <button onclick="simulateSite('https://purrgramming.life')">🧶 Purrgramming</button>
-                    <button onclick="simulateSite('https://cat-bounce.com')">🐾 Cat Bounce</button>
-                    <button onclick="simulateSite('https://cryptocat.example/demo')">🌐 CryptoCat Space</button>
-                    <button onclick="simulateSite('about:cats')">📖 Справочник кота</button>
-                </div>
-            </div>
-
-            <div class="footer-note">
-                <span>© CryptoCat — безопасный браузер для истинных ценителей</span>
-                <span>🐈 v2.4.1 «Whisker»</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Нижняя панель -->
     <div class="toolbar">
-        <div class="tool-item" onclick="alert('✨ Мяу! Защита от слежки: включена')">🛡️ Анти-слежка</div>
-        <div class="tool-item" onclick="alert('🗂️ Ваши закладки сейчас пусты, добавьте любимые сайты')">⭐ Закладки</div>
-        <div class="tool-item" onclick="alert('🧬 CryptoCat не хранит историю — только в памяти кота')">📜 История (0)</div>
-        <div class="tool-item" onclick="alert('🐈 Замурчательная тема: Ночной кот')">🎨 Тема: Ноктюрн</div>
+        <div class="tool-item" onclick="alert('🛡️ Анти-слежка: включена! Все ссылки открываются с защитой.')">🛡️ Анти-слежка</div>
+        <div class="tool-item" onclick="alert('⭐ Сохраните эту страницу в закладки — это ваш CryptoCat браузер')">⭐ Закладки</div>
+        <div class="tool-item" onclick="alert('🐱 История: сегодня вы открывали ссылки через CryptoCat')">📜 История</div>
     </div>
 </div>
 
 <script>
-    // Простая симуляция перехода по ссылке внутри браузера (без реальной навигации)
-    function simulateSite(url) {
-        const contentDiv = document.getElementById('mainContent');
-        // просто имитируем загрузку страницы 
-        if(url === 'about:cats') {
-            contentDiv.innerHTML = `
-                <div style="padding: 20px; text-align: center;">
-                    <span style="font-size: 70px;">🐈📘</span>
-                    <h2 style="margin: 20px 0;">Кошачий справочник</h2>
-                    <p style="color: #bcc0dd;">Породы: Мейн-кун, Сфинкс, Британец, Дворовой Хвост.</p>
-                    <p style="margin-top: 20px;">Любимые сайты: рыбные магазины и картонные коробки.</p>
-                    <button onclick="goHome()" style="margin-top: 30px;">◀ Вернуться в стартовую</button>
-                </div>
-            `;
-        } else {
-            contentDiv.innerHTML = `
-                <div style="padding: 30px; text-align: center;">
-                    <span style="font-size: 64px;">🌐</span>
-                    <h3>Переход на сайт</h3>
-                    <code style="background:#0b0e17; padding: 10px; display: inline-block; margin: 20px; border-radius: 16px;">${url}</code>
-                    <p style="color:#b0b5d1;">В реальном браузере CryptoCat открылась бы эта страница<br> с защитой от трекеров и встроенным блокировщиком рекламы.</p>
-                    <button onclick="goHome()" style="margin-top: 24px;">🐱 Вернуться в родную гавань</button>
-                </div>
-            `;
+    // Функция для безопасного открытия ссылок в НОВОЙ вкладке
+    function openLink(url) {
+        if (url && url !== '#') {
+            window.open(url, '_blank');
+            document.getElementById('urlDisplay').innerText = url;
         }
-        // меняем текст в адресной строке для имитации
-        const addressSpan = document.querySelector('.url-text');
-        if(addressSpan) addressSpan.innerText = url;
     }
 
-    function goHome() {
-        const contentDiv = document.getElementById('mainContent');
-        contentDiv.innerHTML = `
+    // ГЛАВНАЯ СТРАНИЦА (рабочие ссылки!)
+    function renderHome() {
+        document.getElementById('mainContent').innerHTML = `
             <div class="welcome-section">
                 <div class="big-cat">😺🌀</div>
                 <h1>CryptoCat Browser</h1>
-                <div class="tagline">Браузер с характером хитрого кота — безопасно, стильно, без лишней крипты.</div>
+                <div class="tagline">Твой безопасный браузер. Жми на кнопки — ссылки реально открываются!</div>
                 
                 <div class="search-grid">
-                    <div class="cat-card" onclick="alert('🐟 Мур-поиск: здесь будут твои любимые сайты с котами')">
+                    <div class="cat-card" onclick="openLink('https://www.google.com/search?q=самые+смешные+коты')">
                         <span class="cat-emoji">🔎🐈</span>
                         <h4>Мур-поиск</h4>
-                        <p>Анонимные запросы</p>
+                        <p>Найди котов в Google</p>
                     </div>
-                    <div class="cat-card" onclick="alert('📦 Когтеточка для файлов — хранилище лапок')">
+                    <div class="cat-card" onclick="openLink('https://www.youtube.com/results?search_query=cats+funny')">
                         <span class="cat-emoji">📦🐾</span>
-                        <h4>Когтеточка</h4>
-                        <p>Облачные закладки</p>
+                        <h4>Кото-YouTube</h4>
+                        <p>Видео с котами</p>
                     </div>
-                    <div class="cat-card" onclick="alert('🎮 Игровой клуб «Мяу-сити»')">
+                    <div class="cat-card" onclick="openLink('https://purrfectplay.com')">
                         <span class="cat-emoji">🎮🐱</span>
                         <h4>Мяу-сити</h4>
-                        <p>Игры и развлечения</p>
+                        <p>Игры для котов</p>
                     </div>
-                    <div class="cat-card" onclick="alert('🧠 ИИ-Котонейронка — советчик')">
+                    <div class="cat-card" onclick="openLink('https://chat.openai.com')">
                         <span class="cat-emoji">🧠✨</span>
                         <h4>Котонейрон</h4>
                         <p>AI помощник</p>
@@ -414,43 +307,80 @@
                 </div>
 
                 <div style="background: #131824; border-radius: 24px; padding: 18px; margin: 20px 0;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 32px;">📰</span>
-                        <span><strong>Лента «Мурчащие новости»</strong><br>Топ сайтов, которые рекомендуют коты-серферы</span>
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                        <span style="font-size: 32px;">🌐</span>
+                        <span><strong>Популярные ссылки (работают!)</strong><br>Кликни — откроется в новой вкладке</span>
                     </div>
                     <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                        <button onclick="simulateSite('https://purrgramming.life')">🧶 Purrgramming</button>
-                        <button onclick="simulateSite('https://cat-bounce.com')">🐾 Cat Bounce</button>
-                        <button onclick="simulateSite('https://cryptocat.example/demo')">🌐 CryptoCat Space</button>
-                        <button onclick="simulateSite('about:cats')">📖 Справочник кота</button>
+                        <button class="link-button" onclick="openLink('https://www.wikipedia.org')">📖 Википедия</button>
+                        <button class="link-button" onclick="openLink('https://www.reddit.com/r/cats/')">🐈 Reddit (котики)</button>
+                        <button class="link-button" onclick="openLink('https://cataas.com/cat')">🐱 Случайный кот</button>
+                        <button class="link-button" onclick="openLink('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">🎵 Кото-музыка</button>
                     </div>
                 </div>
 
                 <div class="footer-note">
-                    <span>© CryptoCat — безопасный браузер для истинных ценителей</span>
-                    <span>🐈 v2.4.1 «Whisker»</span>
+                    <span>© CryptoCat — браузер с кошачьим характером</span>
+                    <span>🐈 v3.0 «Лапки вверх»</span>
                 </div>
             </div>
         `;
-        const addressSpan = document.querySelector('.url-text');
-        if(addressSpan) addressSpan.innerText = "cryptocat://newtab";
+        document.getElementById('urlDisplay').innerText = "cryptocat://start";
     }
-    
-    // При клике на другие вкладки — просто демо
-    document.querySelectorAll('.tab').forEach((tab, idx) => {
+
+    // Котознавка (тоже с ссылками)
+    function renderWiki() {
+        document.getElementById('mainContent').innerHTML = `
+            <div style="padding: 20px; text-align: center;">
+                <span style="font-size: 60px;">📘🐈</span>
+                <h2 style="margin: 20px 0;">Котознавка</h2>
+                <p style="color: #bcc0dd;">Интересные факты о котах + проверенные ссылки:</p>
+                <ul style="text-align: left; max-width: 400px; margin: 20px auto; background: #11151f; padding: 20px 30px; border-radius: 24px;">
+                    <li style="margin: 10px 0;">🐾 <a href="#" onclick="openLink('https://ru.wikipedia.org/wiki/Кошка'); return false;">Кошка на Википедии</a></li>
+                    <li style="margin: 10px 0;">😻 <a href="#" onclick="openLink('https://icatcare.org/'); return false;">Международный уход за кошками</a></li>
+                    <li style="margin: 10px 0;">📸 <a href="#" onclick="openLink('https://www.instagram.com/explore/tags/cats/'); return false;">#коты в Instagram</a></li>
+                    <li style="margin: 10px 0;">🎥 <a href="#" onclick="openLink('https://www.youtube.com/results?search_query=cat+documentary'); return false;">Документалки про котов</a></li>
+                </ul>
+                <button class="link-button" onclick="renderHome()">← Вернуться на главную</button>
+            </div>
+        `;
+        document.getElementById('urlDisplay').innerText = "cryptocat://wiki";
+    }
+
+    function renderSettings() {
+        document.getElementById('mainContent').innerHTML = `
+            <div style="padding: 40px; text-align: center;">
+                <span style="font-size: 60px;">⚙️🐈</span>
+                <h3>Хвост-настройки</h3>
+                <p style="margin: 20px;">Все ссылки открываются в новой вкладке — безопасно и удобно.</p>
+                <p>✨ Можешь добавить эту страницу в закладки, как личный браузер CryptoCat ✨</p>
+                <button class="link-button" onclick="openLink('https://github.com/')">🐙 GitHub (пример перехода)</button>
+                <button class="link-button" onclick="renderHome()" style="margin-left: 12px;">Домой</button>
+            </div>
+        `;
+        document.getElementById('urlDisplay').innerText = "cryptocat://settings";
+    }
+
+    // Переключение вкладок
+    function setActiveTab(tabId) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+        
+        if (tabId === 'home') renderHome();
+        else if (tabId === 'wiki') renderWiki();
+        else if (tabId === 'settings') renderSettings();
+    }
+
+    // Обработчики вкладок
+    document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
-            if(idx === 0) goHome();
-            else if(idx === 1) {
-                document.getElementById('mainContent').innerHTML = `<div style="padding: 40px; text-align:center;"><span style="font-size:60px;">📘🐈</span><h3>Котознавка</h3><p>Энциклопедия кото-фактов: усы, лапы и хвост — вот главные инструменты серфинга.</p><button onclick="goHome()" style="margin-top:20px;">🐱 На главную</button></div>`;
-                document.querySelector('.url-text').innerText = "cryptocat://wiki/cats";
-            } else if(idx === 2) {
-                document.getElementById('mainContent').innerHTML = `<div style="padding: 40px; text-align:center;"><span style="font-size:60px;">⚙️🐈</span><h3>Режим «Ленивый кот»</h3><p>Тёмная тема, блокировка мышей, мягкая подушка для запястий.</p><button onclick="goHome()" style="margin-top:20px;">Вернуться</button></div>`;
-                document.querySelector('.url-text').innerText = "cryptocat://settings/paws";
-            }
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+            const tabId = tab.getAttribute('data-tab');
+            setActiveTab(tabId);
         });
     });
+
+    // Запускаем домашнюю страницу
+    renderHome();
 </script>
 </body>
-    </html>
+</html>
